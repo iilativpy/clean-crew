@@ -1,0 +1,23 @@
+{
+  "name": "clean-crew",
+  "description": "Clean Code + Clean Architecture skills and a clean-coder agent for Claude Code and GitHub Copilot CLI. Makes your AI coding agent write maintainable code: naming, functions, SOLID, boundaries, smells checklist.",
+  "version": "0.1.0",
+  "author": {
+    "name": "iilativpy",
+    "url": "https://github.com/iilativpy"
+  },
+  "homepage": "https://github.com/iilativpy/clean-crew",
+  "repository": "https://github.com/iilativpy/clean-crew",
+  "license": "MIT",
+  "keywords": [
+    "clean-code",
+    "clean-architecture",
+    "solid",
+    "code-quality",
+    "refactoring",
+    "code-smells",
+    "agent-skills",
+    "claude-code",
+    "github-copilot"
+  ]
+}

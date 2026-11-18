@@ -1,32 +1,32 @@
 ---
 name: clean-code
-description: Code-level craftsmanship rules distilled from "Clean Code" (R. C. Martin) — naming, functions, comments, formatting, error handling, classes, unit tests and code smells. Use whenever writing, changing, refactoring or reviewing code at the line, function or class level, in any language.
+description: Code-level craftsmanship rules distilled from "Clean Code" (R. C. Martin) - naming, functions, comments, formatting, error handling, classes, unit tests and code smells. Use whenever writing, changing, refactoring or reviewing code at the line, function or class level, in any language.
 ---
 
-# Clean Code — working rules
+# Clean Code - working rules
 
 Apply these whenever you add or change code. They are defaults, not dogma: when the
 project has an established convention that conflicts, follow the project and mention it.
 
 ## 0. Prime directives
-- Code is read far more than written (the book estimates over 10:1). Optimize for the next reader — you are an author.
+- Code is read far more than written (the book estimates over 10:1). Optimize for the next reader - you are an author.
 - Messes slow everyone down until productivity approaches zero, and a grand rewrite rarely
   saves you. Speed comes from keeping the code clean, and cleanup deferred "for later" never happens.
-- **Boy Scout Rule**: leave the code you touched a little cleaner — but only inside the
+- **Boy Scout Rule**: leave the code you touched a little cleaner - but only inside the
   scope of the change (rename a bad local, extract one muddled block). No drive-by rewrites.
-- Make it work → make it right → (only if measured) make it fast.
+- Make it work -> make it right -> (only if measured) make it fast.
 - Every change keeps the tests green. No tests around the area? Add them first.
 
 ## 1. Names
 - Reveal intent: `elapsedDays`, not `d`. If a name needs a comment, rename it.
 - No disinformation: don't call it `accountList` unless it is a List.
-- Make meaningful distinctions — no `data`/`info`/`obj`/`a1`, `a2`, no noise words.
+- Make meaningful distinctions - no `data`/`info`/`obj`/`a1`, `a2`, no noise words.
 - Pronounceable and searchable; single-letter names only for tiny loop scopes.
 - No encodings: no Hungarian notation, no `m_` prefixes, no `I` prefix just for interfaces
   (unless it's the project convention).
-- Classes/objects → nouns (`Customer`, `AddressParser`). Avoid `Manager`, `Processor`,
+- Classes/objects -> nouns (`Customer`, `AddressParser`). Avoid `Manager`, `Processor`,
   `Data`, `Info` as vague catch-alls.
-- Methods → verbs (`save`, `deletePage`); accessors/predicates `get`/`set`/`is`/`has`.
+- Methods -> verbs (`save`, `deletePage`); accessors/predicates `get`/`set`/`is`/`has`.
 - One word per concept (pick `fetch` OR `get` OR `retrieve`, stay consistent). Don't pun
   (don't reuse `add` for both "sum" and "append").
 - Use solution-domain terms (patterns, algorithms) for technical concepts, problem-domain
@@ -48,12 +48,12 @@ project has an established convention that conflicts, follow the project and men
 - **Stepdown rule**: read top-to-bottom like a narrative; callers above callees.
 - **Switch/when statements**: bury them once, in a factory, to create polymorphic objects.
   Don't repeat the same switch across the code.
-- **Arguments**: 0 ideal, 1–2 fine, 3 needs justification, more → introduce a parameter
-  object. **No boolean flag arguments** — split into two functions.
+- **Arguments**: 0 ideal, 1–2 fine, 3 needs justification, more -> introduce a parameter
+  object. **No boolean flag arguments** - split into two functions.
 - No output arguments; if a function must change state, change the state of its owner.
 - **No hidden side effects.** `checkPassword()` must not also initialize a session.
 - **Command–Query Separation**: a function either does something or answers something.
-- **Prefer exceptions to error codes**; extract `try` bodies into their own function —
+- **Prefer exceptions to error codes**; extract `try` bodies into their own function -
   error handling is "one thing".
 - **DRY**: duplication is the root of much evil; remove it via extraction/abstraction.
 - Single entry/exit (structured programming) matters for big functions; in small ones an
@@ -67,8 +67,8 @@ project has an established convention that conflicts, follow the project and men
   clarification of an unchangeable API, TODOs (tracked), public API docs.
 - Bad comments: redundant restatements, mandated javadoc on every getter, journal/changelog
   comments, position markers/banners, closing-brace comments, attributions, **commented-out
-  code (delete it — VCS remembers)**, misleading or outdated comments.
-- Never leave a comment that lies after your change — update or delete it.
+  code (delete it - VCS remembers)**, misleading or outdated comments.
+- Never leave a comment that lies after your change - update or delete it.
 
 ## 4. Formatting
 - Newspaper metaphor: high-level at top, details below.
@@ -82,13 +82,13 @@ project has an established convention that conflicts, follow the project and men
   Don't build hybrids (public getters/setters for everything **plus** business logic).
 - **Anti-symmetry trade-off**: procedural code (data structures + functions) makes adding
   new *functions* easy and new *types* hard; OO makes new *types* easy and new *functions*
-  hard. Choose per area based on which will change more — "everything is an object" is a myth.
+  hard. Choose per area based on which will change more - "everything is an object" is a myth.
 - Don't add getters/setters reflexively; expose abstract operations (`percentFuelRemaining()`),
   not raw fields.
-- Active Record / ORM entities are data structures — keep business rules in separate objects.
-- **Law of Demeter**: a method talks to its own fields, params, objects it creates — not to
+- Active Record / ORM entities are data structures - keep business rules in separate objects.
+- **Law of Demeter**: a method talks to its own fields, params, objects it creates - not to
   strangers. Avoid train wrecks `a.getB().getC().doIt()`; tell, don't ask.
-- DTOs/records are fine at boundaries — keep business logic out of them.
+- DTOs/records are fine at boundaries - keep business logic out of them.
 
 ## 6. Error handling
 - Use exceptions, not return codes. Prefer unchecked exceptions in application code.
@@ -99,12 +99,12 @@ project has an established convention that conflicts, follow the project and men
   Special Case pattern so the caller never needs to handle the exceptional case.
 - **Don't return null. Don't pass null.** Return empty collections, `Optional`, or a
   Special Case / Null Object.
-- Write the `try-catch-finally` first when code can throw — it defines the transaction scope.
+- Write the `try-catch-finally` first when code can throw - it defines the transaction scope.
 
 ## 7. Boundaries (third-party code)
 - Wrap third-party APIs behind your own interface; don't pass e.g. a raw `Map` with library
   types around the system.
-- Write **learning tests** for third-party libraries — they also detect breaking upgrades.
+- Write **learning tests** for third-party libraries - they also detect breaking upgrades.
 - For not-yet-existing APIs, define the interface you wish you had, and adapt later.
 
 ## 8. Unit tests
@@ -121,10 +121,10 @@ project has an established convention that conflicts, follow the project and men
 - **F.I.R.S.T.**: Fast, Independent, Repeatable, Self-validating, Timely.
 
 ## 9. Classes
-- Small — measured in **responsibilities**, not lines. If you can't describe the class in
+- Small - measured in **responsibilities**, not lines. If you can't describe the class in
   ~25 words without "and/or/but", it has too many.
 - **Single Responsibility**: one reason to change.
-- **High cohesion**: most methods use most fields. Losing cohesion → split the class.
+- **High cohesion**: most methods use most fields. Losing cohesion -> split the class.
 - Organize for change: open for extension, closed for modification; depend on abstractions
   to isolate from change.
 - Order: constants, static vars, instance vars, public methods, private helpers right
@@ -135,22 +135,22 @@ project has an established convention that conflicts, follow the project and men
 - Isolate from change: depend on interfaces for volatile details (e.g. an external price
   API) so tests can substitute them.
 
-## 10. Systems, emergence, concurrency (summaries — open the reference for details)
+## 10. Systems, emergence, concurrency (summaries - open the reference for details)
 - Separate construction (wiring, `main`, DI container) from use; keep domain logic in
-  plain objects; handle cross-cutting concerns non-invasively → `references/systems.md`.
-- Kent Beck's simple design, in priority order: **runs all tests → no duplication →
-  expresses intent → minimal classes and methods.**
+  plain objects; handle cross-cutting concerns non-invasively -> `references/systems.md`.
+- Kent Beck's simple design, in priority order: **runs all tests -> no duplication ->
+  expresses intent -> minimal classes and methods.**
 - Concurrency: keep concurrency code separate, limit shared data, prefer copies and
   independent threads, keep synchronized sections small, design shutdown early, break
-  deadlock by global lock ordering → **always open `references/concurrency.md` when the
+  deadlock by global lock ordering -> **always open `references/concurrency.md` when the
   change touches threads, async, locks or shared mutable state.**
 
 ## 11. Smell checklist (run before finishing a change)
 Quick list below; the full 66-item catalog with IDs (C1–C5, E1–E2, F1–F4, G1–G36, J1–J3,
-N1–N7, T1–T9) is in `references/smells-catalog.md` — use it for reviews and cite IDs.
-**Comments** — obsolete, redundant, commented-out code, poorly written.
-**Environment** — build or tests need more than one step.
-**Functions** — too many args, output/flag args, dead functions.
+N1–N7, T1–T9) is in `references/smells-catalog.md` - use it for reviews and cite IDs.
+**Comments** - obsolete, redundant, commented-out code, poorly written.
+**Environment** - build or tests need more than one step.
+**Functions** - too many args, output/flag args, dead functions.
 **General**
 - Duplication (copy-paste, repeated switch/if chains, similar algorithms)
 - Code at the wrong level of abstraction; base class depending on derivatives
@@ -163,10 +163,10 @@ N1–N7, T1–T9) is in `references/smells-catalog.md` — use it for reviews an
 - if/else or switch chains instead of polymorphism; unencapsulated conditionals
   (`if (shouldBeDeleted(timer))` beats `if (timer.hasExpired() && !timer.isRecurrent())`)
 - Negative conditionals; functions doing more than one thing; hidden temporal couplings
-- Magic numbers → named constants; imprecision (floats for money, ignoring concurrency)
+- Magic numbers -> named constants; imprecision (floats for money, ignoring concurrency)
 - Transitive navigation (Law of Demeter); boundary conditions not encapsulated
-**Names** — non-descriptive, wrong abstraction level, ambiguous, encoded, hiding side effects.
-**Tests** — insufficient, untested boundaries, ignored tests, slow tests, no coverage tool,
+**Names** - non-descriptive, wrong abstraction level, ambiguous, encoded, hiding side effects.
+**Tests** - insufficient, untested boundaries, ignored tests, slow tests, no coverage tool,
 skipping trivial tests, not testing near known bugs.
 
 ## Reference files (load on demand)

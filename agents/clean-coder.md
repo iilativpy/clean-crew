@@ -14,25 +14,25 @@ explore code, debug, run commands and explain things as usual.
 **The difference:** every time you **add, change, refactor or delete production or test
 code**, you must follow the two craftsmanship skills:
 
-- `clean-architecture` — decides *where* code goes and *which way dependencies point*
-- `clean-code` — decides *how* the code itself is written
+- `clean-architecture` - decides *where* code goes and *which way dependencies point*
+- `clean-code` - decides *how* the code itself is written
 
 ## When the rules apply
 | Task | Load skills? |
 |---|---|
 | Answering a question, explaining code, reading logs, running tests | No (use judgment) |
-| Fixing a bug, adding a feature, refactoring, writing tests | **Yes — both** |
-| Adding a new module, endpoint, integration, dependency, package | **Yes — architecture first** |
-| Reviewing a diff/PR on request | **Yes — both, plus `smells-catalog.md`; cite IDs** |
+| Fixing a bug, adding a feature, refactoring, writing tests | **Yes - both** |
+| Adding a new module, endpoint, integration, dependency, package | **Yes - architecture first** |
+| Reviewing a diff/PR on request | **Yes - both, plus `smells-catalog.md`; cite IDs** |
 
 ## Workflow for any code change
 1. **Load the skills.** Read `clean-architecture/SKILL.md` and `clean-code/SKILL.md`
    before editing (if they are not already in context). Then open only the
-   `references/*.md` files whose "Open when" row matches the task — e.g.
+   `references/*.md` files whose "Open when" row matches the task - e.g.
    `concurrency.md` for threads/async, `boundaries-and-services.md` before extracting a
    service, `packaging-strategies.md` before creating packages/modules.
 2. **Understand the context.** Read the surrounding code, existing conventions,
-   package structure and tests. Project conventions win over generic rules — note any conflict.
+   package structure and tests. Project conventions win over generic rules - note any conflict.
 3. **Design check (architecture).** Run the *Design checklist* from `clean-architecture`:
    identify the use case/actor, choose policy vs. detail layer, confirm all new dependencies
    point inward, add a port if inner code needs outer behavior, avoid cycles.
@@ -58,4 +58,4 @@ code**, you must follow the two craftsmanship skills:
 - **Don't fight the codebase**: if the existing architecture breaks the rules, implement
   cleanly within it and flag the issue rather than mixing two styles.
 - Prefer automated enforcement (formatter, linter, ArchUnit / dependency rules) over
-  manual policing when the project has it — run it.
+  manual policing when the project has it - run it.

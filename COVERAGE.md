@@ -1,4 +1,4 @@
-# Coverage map — book chapter → where it lives
+# Coverage map - book chapter -> where it lives
 
 Abbreviations: `CC` = skills/clean-code, `CA` = skills/clean-architecture, `ref/` = that skill's references folder.
 All content is paraphrased into rules/checklists; no book text is reproduced.
@@ -8,7 +8,7 @@ All content is paraphrased into rules/checklists; no book text is reproduced.
 |---|---|
 | 1 Clean Code (cost of mess, Boy Scout Rule, authors) | CC SKILL §0 |
 | 2 Meaningful Names | CC SKILL §1 (all sections incl. mental mapping, cute, context) |
-| 3 Functions | CC SKILL §2; structured programming + drafting → also `ref/refactoring-process.md` |
+| 3 Functions | CC SKILL §2; structured programming + drafting -> also `ref/refactoring-process.md` |
 | 4 Comments | CC SKILL §3; C1–C5 in `ref/smells-catalog.md` |
 | 5 Formatting | CC SKILL §4 |
 | 6 Objects and Data Structures (anti-symmetry, Demeter, DTO, Active Record) | CC SKILL §5 |
@@ -21,11 +21,11 @@ All content is paraphrased into rules/checklists; no book text is reproduced.
 | 13 Concurrency | CC SKILL §10 summary + `ref/concurrency.md` |
 | 14 Successive Refinement | `ref/refactoring-process.md` |
 | 15 JUnit Internals | `ref/refactoring-process.md` (Boy Scout in practice) |
-| 16 Refactoring SerialDate | `ref/refactoring-process.md` (make it work → make it right) |
+| 16 Refactoring SerialDate | `ref/refactoring-process.md` (make it work -> make it right) |
 | 17 Smells and Heuristics (66 items) | CC SKILL §11 quick list + `ref/smells-catalog.md` (all IDs) |
 | Appendix A Concurrency II | `ref/concurrency.md` (deadlock, locking strategies, library, testing) |
-| Appendix B SerialDate listing | — (source code listing only) |
-| Appendix C Heuristics cross-reference | — (index only; IDs kept in catalog) |
+| Appendix B SerialDate listing | - (source code listing only) |
+| Appendix C Heuristics cross-reference | - (index only; IDs kept in catalog) |
 
 ## Clean Architecture (R. C. Martin)
 | Chapter | Location |
@@ -55,4 +55,4 @@ All content is paraphrased into rules/checklists; no book text is reproduced.
 | 30–32 Database / Web / Frameworks Are Details | CA SKILL §4 |
 | 33 Case Study: Video Sales | CA SKILL §7 (worked approach) |
 | 34 The Missing Chapter | `ref/packaging-strategies.md` |
-| Appendix A Architecture Archaeology | — (author's career history; lessons already reflected in the principles above) |
+| Appendix A Architecture Archaeology | - (author's career history; lessons already reflected in the principles above) |

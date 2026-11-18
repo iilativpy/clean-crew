@@ -4,7 +4,7 @@ Load this before any refactoring, or when a change grows messy while implementin
 
 ## Write dirty, then clean
 - Nobody writes clean code in one pass. Like prose: draft first, then restructure and
-  polish. First drafts of functions are long, nested, badly named, duplicated — **that's
+  polish. First drafts of functions are long, nested, badly named, duplicated - **that's
   fine only if they are covered by tests**, and only until you clean them.
 - "It works" is not "done". Moving on as soon as code works is how messes are born; cleaning
   it later rarely happens.
@@ -12,11 +12,11 @@ Load this before any refactoring, or when a change grows messy while implementin
 ## Notice when to stop adding features
 - When each new feature makes the structure noticeably worse (e.g., every new type needs
   edits in three places), **stop adding features and refactor** before the mess gets too big.
-- Look for the missing concept (repeated "do X for each kind" → a class hierarchy /
+- Look for the missing concept (repeated "do X for each kind" -> a class hierarchy /
   polymorphic object).
 
 ## Incrementalism
-- Massive "improvement" rewrites often ruin programs — it's hard to get back to the old
+- Massive "improvement" rewrites often ruin programs - it's hard to get back to the old
   behavior.
 - Keep the system **working at all times** (TDD discipline): many tiny steps, run the tests
   after each, never a change that breaks the build for long.
@@ -31,7 +31,7 @@ Reviewing/refactoring existing code (even good code):
    behavior as tests to make pass (G2).
 2. **Make it work**: fix bugs the new tests reveal; look at coverage patterns for dead or
    wrong code (T8).
-3. **Make it right**: walk the code top to bottom, applying the heuristics (name the smell —
+3. **Make it right**: walk the code top to bottom, applying the heuristics (name the smell -
    N1, G5, C2…), running all tests after every change.
 4. Expect trial and error: you will sometimes undo a refactoring. Refactoring is iterative
    and converges.
@@ -43,7 +43,7 @@ Reviewing/refactoring existing code (even good code):
 ## Boy Scout Rule in practice
 - Even well-kept modules can be improved a little: remove scope prefixes, encapsulate a
   conditional, invert a negative, unify inconsistent names, fix off-by-one boundary logic.
-  Leave each module slightly cleaner than you found it — within the scope of your change.
+  Leave each module slightly cleaner than you found it - within the scope of your change.
 
 ## Structured programming note (ch. 3)
 - Dijkstra's single-entry/single-exit rule matters for large functions. If functions are

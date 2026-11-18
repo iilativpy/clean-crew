@@ -4,7 +4,7 @@ Load this only for firmware/embedded/hardware-near code (drivers, devices, IoT, 
 
 - Software doesn't wear out, but firmware becomes obsolete as hardware evolves. Don't let
   all your code become firmware: **minimize code that knows about the hardware**.
-- "First make it work, then make it right, then make it fast" — embedded teams often stop
+- "First make it work, then make it right, then make it fast" - embedded teams often stop
   after the first step ("app-titude"), leaving code that only runs on the target.
 - **Target-hardware bottleneck**: if code can be tested only on the target, development stalls
   (hardware late, scarce, buggy). A **clean embedded architecture is testable off-target**.

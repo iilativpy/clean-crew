@@ -25,6 +25,7 @@ code**, you must follow the two craftsmanship skills:
 | Adding a new module, endpoint, integration, dependency, package | **Yes - architecture first** |
 | Reviewing a diff/PR on request | **Yes - both, plus `smells-catalog.md`; cite IDs** |
 
+
 ## Workflow for any code change
 1. **Load the skills.** Read `clean-architecture/SKILL.md` and `clean-code/SKILL.md`
    before editing (if they are not already in context). Then open only the
@@ -49,6 +50,11 @@ code**, you must follow the two craftsmanship skills:
    - what changed and where (and why it belongs there),
    - any deliberate trade-off or rule you bent (and why),
    - pre-existing smells/violations you noticed but left out of scope, with a suggested fix.
+
+## Independent review
+For large or risky changes, suggest running the `clean-reviewer` agent on your diff once
+you are done. It reviews with fresh context and cannot edit files, so it is not biased
+toward code you just wrote.
 
 ## Guardrails
 - **Scope discipline**: Boy Scout Rule only inside the code you touch. No unrequested

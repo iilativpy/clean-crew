@@ -18,6 +18,7 @@ skills and a ready-made agent that applies them every time it touches code.
 | `clean-architecture` skill | *Where* code goes and *which way dependencies point*: SOLID, the Dependency Rule, component cohesion/coupling, boundaries, use cases vs. details |
 | `clean-code` skill | *How* code is written: naming, small functions, comments, formatting, error handling, classes, unit tests, and a smells checklist |
 | `clean-coder` agent | A general-purpose coding agent that loads both skills before any add/change/refactor, then self-reviews its diff against them |
+| `clean-reviewer` agent | A read-only reviewer for diffs and PRs: fresh context, prioritized findings, smell IDs and concrete fixes. It never edits files |
 
 Each skill has a short `SKILL.md` (always loaded) plus `references/` files that the agent
 opens only when the task needs them (concurrency, packaging, service boundaries, the full
@@ -44,7 +45,8 @@ Guardrails: no unrequested refactors, no over-engineering, no fighting the exist
 ```
 
 Then run the agent with `claude --agent clean-crew:clean-coder`, or just let Claude pick up
-the skills automatically when you ask it to write or refactor code.
+the skills automatically when you ask it to write or refactor code. To review a change, ask
+Claude to "use the clean-reviewer agent on my diff".
 
 ### GitHub Copilot CLI (plugin)
 
@@ -53,7 +55,7 @@ copilot plugin marketplace add iilativpy/clean-crew
 copilot plugin install clean-crew@clean-crew
 ```
 
-Select the agent with `/agent` and choose `clean-coder`.
+Select an agent with `/agent` and choose `clean-coder` or `clean-reviewer`.
 
 > Copilot CLI support is based on the documented plugin format (it reads the same
 > `.claude-plugin/` manifests). If something doesn't load for you, please
@@ -67,7 +69,7 @@ Select the agent with `/agent` and choose `clean-coder`.
 ```bash
 mkdir -p .claude/skills .claude/agents
 cp -r skills/clean-code skills/clean-architecture .claude/skills/
-cp agents/clean-coder.md .claude/agents/clean-coder.md
+cp agents/clean-coder.md agents/clean-reviewer.md .claude/agents/
 ```
 </details>
 
@@ -78,6 +80,7 @@ cp agents/clean-coder.md .claude/agents/clean-coder.md
 mkdir -p .github/skills .github/agents
 cp -r skills/clean-code skills/clean-architecture .github/skills/
 cp agents/clean-coder.md .github/agents/clean-coder.agent.md
+cp agents/clean-reviewer.md .github/agents/clean-reviewer.agent.md
 ```
 </details>
 
@@ -93,7 +96,8 @@ Add this to `CLAUDE.md` / `.github/copilot-instructions.md`:
 ```text
 .claude-plugin/plugin.json          # plugin manifest (Claude Code + Copilot CLI)
 .claude-plugin/marketplace.json     # makes this repo installable as a marketplace
-agents/clean-coder.md               # the agent
+agents/clean-coder.md               # writes code following the skills
+agents/clean-reviewer.md            # read-only reviewer
 skills/clean-architecture/          # design-level rules + references/
 skills/clean-code/                  # code-level rules + references/
 ```

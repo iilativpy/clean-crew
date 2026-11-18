@@ -8,12 +8,17 @@ description: Code-level craftsmanship rules - naming, functions, comments, forma
 Apply these whenever you add or change code. They are defaults, not dogma: when the
 project has an established convention that conflicts, follow the project and mention it.
 
+**Short on time or a small change?** Read sections 0-2, 6, 8 and 11 only. Read the rest when
+the change touches that topic.
+
 ## 0. Prime directives
 - Code is read far more than written (commonly estimated at over 10:1). Optimize for the next reader - you are an author.
 - Messes slow everyone down until productivity approaches zero, and a grand rewrite rarely
   saves you. Speed comes from keeping the code clean, and cleanup deferred "for later" never happens.
 - **Boy Scout Rule**: leave the code you touched a little cleaner - but only inside the
-  scope of the change (rename a bad local, extract one muddled block). No drive-by rewrites.
+  scope of the change. Budget: a few small, behavior-preserving cleanups in the function you
+  modify (a rename, a named constant, one extracted helper), mentioned in your report.
+  No drive-by rewrites. Fix a correctness or security defect on any line you edit anyway.
 - Make it work -> make it right -> (only if measured) make it fast.
 - Every change keeps the tests green. No tests around the area? Add them first.
 
@@ -91,7 +96,9 @@ project has an established convention that conflicts, follow the project and men
 - DTOs/records are fine at boundaries - keep business logic out of them.
 
 ## 6. Error handling
-- Use exceptions, not return codes. Prefer unchecked exceptions in application code.
+- Use exceptions, not return codes, and follow the language's idiom: unchecked exceptions in
+  Java/Kotlin/C#, ordinary exceptions in Python/JS/TS, typed errors or `Result` in Go/Rust.
+  Never signal failure with a magic value (`-1`, `None`, empty string).
 - Provide context in exceptions: what operation failed and why.
 - Define exception classes by how the **caller** needs to handle them; wrap third-party APIs
   so their exceptions don't leak.
@@ -146,28 +153,20 @@ project has an established convention that conflicts, follow the project and men
   change touches threads, async, locks or shared mutable state.**
 
 ## 11. Smell checklist (run before finishing a change)
-Quick list below; the full 66-item catalog with IDs (C1–C5, E1–E2, F1–F4, G1–G36, J1–J3,
-N1–N7, T1–T9) is in `references/smells-catalog.md` - use it for reviews and cite IDs.
-**Comments** - obsolete, redundant, commented-out code, poorly written.
-**Environment** - build or tests need more than one step.
-**Functions** - too many args, output/flag args, dead functions.
-**General**
-- Duplication (copy-paste, repeated switch/if chains, similar algorithms)
-- Code at the wrong level of abstraction; base class depending on derivatives
-- Too much information exposed; dead code; vertical separation too large
-- Inconsistency; clutter; artificial coupling; feature envy (method uses another class's data more than its own)
-- Selector/flag arguments; obscured intent; misplaced responsibility
-- Inappropriate static (should be polymorphic); missing explanatory variables
-- Function names that don't say what they do; not understanding the algorithm
-- Logical dependency instead of physical dependency
-- if/else or switch chains instead of polymorphism; unencapsulated conditionals
-  (`if (shouldBeDeleted(timer))` beats `if (timer.hasExpired() && !timer.isRecurrent())`)
-- Negative conditionals; functions doing more than one thing; hidden temporal couplings
-- Magic numbers -> named constants; imprecision (floats for money, ignoring concurrency)
-- Transitive navigation (Law of Demeter); boundary conditions not encapsulated
-**Names** - non-descriptive, wrong abstraction level, ambiguous, encoded, hiding side effects.
-**Tests** - insufficient, untested boundaries, ignored tests, slow tests, no coverage tool,
-skipping trivial tests, not testing near known bugs.
+The full 66-item catalog with IDs (C1-C5, E1-E2, F1-F4, G1-G36, J1-J3, N1-N7, T1-T9) is in
+`references/smells-catalog.md` - use it for reviews and cite IDs. The most common ones:
+- **Duplication** (copy-paste, repeated if/switch chains) and **dead code**.
+- **Functions**: more than one thing, mixed abstraction levels, too many args, flag/selector
+  args, output args, hidden side effects.
+- **Wrong place**: feature envy, misplaced responsibility, Law of Demeter train wrecks,
+  logic that depends on another class's internals.
+- **Unclear intent**: cryptic or misleading names, magic numbers, negative or unencapsulated
+  conditionals, hidden temporal coupling.
+- **Errors**: returned codes or `null`/`None` instead of exceptions, swallowed exceptions,
+  imprecision (floats for money, ignoring concurrency).
+- **Comments**: redundant, obsolete, commented-out code.
+- **Tests**: new behavior untested, untested boundaries, slow or ignored tests, tests that
+  assert wrong behavior.
 
 ## Reference files (load on demand)
 | File | Open when |

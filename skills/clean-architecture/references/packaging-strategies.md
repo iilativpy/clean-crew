@@ -1,7 +1,8 @@
 # Packaging strategies and enforcement
 
-Load this when creating new packages/modules, organizing a code base, or deciding how to
-enforce architecture rules.
+Load this when creating a new **package or build module**, organizing a code base, or deciding
+how to enforce architecture rules. Adding a new source file inside an existing package does not
+need this file. The examples are Java-flavored; see "Equivalents in other languages" below.
 
 ## Four ways to organize the same use case (e.g. "view orders")
 | Style | Structure | Pros | Cons |
@@ -24,6 +25,13 @@ enforce architecture rules.
      don't compile.
   4. Static analysis rules (ArchUnit, dependency-cruiser, import-linter) as a fallback -
      useful, but feedback is later and fallible.
+- **Equivalents in other languages**
+  - Python: leading-underscore names, an explicit public API in a package `__init__.py` / `__all__`,
+    `import-linter` contracts.
+  - TypeScript: one `index.ts` per package as the only import point, `eslint-plugin-boundaries`
+    or `dependency-cruiser`, `package.json` `exports`.
+  - Go: `internal/` directories (enforced by the compiler), small packages.
+  - C#: `internal` types, separate projects per layer.
 - Watch for coupling in other places, e.g. shared data models across components.
 - Be pragmatic: weigh team size, skill, complexity, time and budget.
 

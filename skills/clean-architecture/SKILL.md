@@ -9,16 +9,18 @@ Use this before writing code that adds a new type, module, endpoint, integration
 dependency. Answer "**where does this belong and which way do dependencies point?**"
 first, then write the code (with the `clean-code` skill).
 
+**Which sections to read.** Writing code: 1, 4, 8 and "Pragmatism". Reviewing: 1, 2, 8 and
+"Pragmatism". Section 3 only when creating or splitting packages/modules. Sections 5-7 when
+designing a use case, tests or a new feature area. Section 0 is background; skip it when short
+on time.
+
 ## 0. Goal of architecture
 - Minimize the human effort to build **and maintain** the system.
 - Behavior matters, but **structure (changeability) matters more** - a working system that
   can't change becomes worthless; a changeable one can be made to work.
 - Keep options open: defer decisions about details (DB, framework, web, UI, vendors).
-- Architecture is *important but rarely urgent* (Eisenhower matrix); features are urgent but
-  often less important. Developers are responsible for defending structure against the
-  pressure to just ship features - a "we'll clean it later" mess makes every release slower.
-- There's no real line between design and architecture: low-level decisions and high-level
-  structure are one continuum.
+- Developers are responsible for defending structure against the pressure to just ship
+  features - a "we'll clean it later" mess makes every release slower.
 
 ## 1. The Dependency Rule (non-negotiable)
 Source-code dependencies point **only inward**, toward higher-level policy.
@@ -34,7 +36,9 @@ Source-code dependencies point **only inward**, toward higher-level policy.
 - Data crossing a boundary is plain, simple structures shaped for the inner circle's
   convenience - not DB rows or framework request objects.
 - When control flow must go outward (use case -> DB), **invert** it: the use case owns an
-  output port interface; the adapter implements it (DIP).
+  output port interface; the adapter implements it (DIP). A port is a Java/C# interface, a
+  Python `Protocol` or ABC, a TS interface, or in dynamic code just a function or duck-typed
+  object passed in. Use the lightest form the language allows.
 - **Level = distance from inputs/outputs**: the farther from I/O, the higher the level.
   Dependencies follow level, not data flow.
 - Polymorphism (OO) is the mechanism that makes any dependency invertible; immutability
@@ -150,6 +154,20 @@ Source-code dependencies point **only inward**, toward higher-level policy.
 | `references/packaging-strategies.md` | New packages/modules, reorganizing a code base, enforcing architecture rules |
 | `references/paradigms.md` | Polymorphism/plugin design, immutability, event sourcing, mutable shared state |
 | `references/embedded.md` | Firmware, drivers, hardware/OS-near code only |
+
+## Adding to a messy legacy code base
+When the existing code mixes concerns (for example one function doing validation, pricing,
+SQL and email):
+1. Put the **new policy** in a new module next to the old file, with its own tests. It must not
+   import the legacy module.
+2. Hide I/O behind small ports (a store, a notifier). Provide a fake in tests and a real
+   adapter in its own module.
+3. Make the legacy function a **thin wiring layer**: it imports the new code and calls it. The
+   dependency points from legacy to new, never the reverse.
+4. Touch legacy lines only as far as the feature needs. Do not restructure the legacy file.
+5. When a change extends a persisted schema (new columns), say how existing data gets migrated;
+   a `create table if not exists` does not alter an existing table. Include a migration if the
+   project has a tool for it, otherwise report it as a follow-up.
 
 ## Pragmatism
 - Respect the existing architecture of the project. If it violates these rules, don't

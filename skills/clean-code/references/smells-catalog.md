@@ -1,6 +1,6 @@
-# Smells & heuristics catalog (Clean Code, ch. 17)
+# Smells and heuristics catalog
 
-All 66 heuristics, paraphrased as checks. IDs match the book so review findings can cite
+All 66 heuristics, paraphrased as checks. IDs are stable so review findings can cite
 them (e.g. "G28: unencapsulated conditional").
 
 ## Comments (C)
@@ -59,7 +59,7 @@ them (e.g. "G28: unencapsulated conditional").
 - **G36 Avoid transitive navigation** - Law of Demeter; no `a.getB().getC().do()`; collaborators offer the services you need.
 
 ## Java (J) - apply to Java/Kotlin, adapt for other languages
-- **J1 Avoid long import lists** - the book favors wildcard imports for 2+ classes from a package. *Note: many modern teams/linters forbid wildcards; follow the project's formatter/linter (G24) - the intent is "imports shouldn't drown the file".*
+- **J1 Avoid long import lists** - wildcard imports are the traditional advice for 2+ classes from a package. *Note: many modern teams/linters forbid wildcards; follow the project's formatter/linter (G24) - the intent is "imports shouldn't drown the file".*
 - **J2 Don't inherit constants** - don't implement an interface just to see its constants; use static imports or reference the owner.
 - **J3 Constants versus enums** - use enums (with fields and methods) instead of `public static final int` codes.
 

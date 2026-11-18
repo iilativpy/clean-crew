@@ -1,4 +1,4 @@
-# Clean embedded architecture (Clean Architecture ch. 29)
+# Clean embedded architecture
 
 Load this only for firmware/embedded/hardware-near code (drivers, devices, IoT, RTOS).
 

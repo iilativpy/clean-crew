@@ -1,14 +1,14 @@
-# Components, cohesion, coupling and metrics (Clean Architecture Part IV, ch. 12–14)
+# Components, cohesion, coupling and metrics
 
 Load this when creating/splitting/merging modules, packages, jars, Maven/Gradle modules,
 libraries or services, or when analyzing dependency structure.
 
-## Components (ch. 12)
+## Components
 - A component is the **unit of deployment** (jar, DLL, gem, shared library) - the smallest
   thing that can be deployed. Dynamically linked components that plug together at runtime
   make a plugin architecture the normal default.
 
-## Cohesion - which classes belong together (ch. 13)
+## Cohesion - which classes belong together
 - **REP – Reuse/Release Equivalence**: the granule of reuse is the granule of release.
   Classes in a component should form a cohesive group that makes sense to release and
   version together (release numbers, release notes).
@@ -22,7 +22,7 @@ libraries or services, or when analyzing dependency structure.
   once; ignoring CRP -> too many unnecessary releases. Early in a project favor CCP
   (develop-ability); as the project matures and others reuse it, shift toward REP.
 
-## Coupling - how components relate (ch. 14)
+## Coupling - how components relate
 ### ADP – Acyclic Dependencies
 - No cycles in the component dependency graph (cycles cause "the morning-after syndrome":
   your code breaks because someone changed something you depend on, and cycles make

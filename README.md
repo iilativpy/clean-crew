@@ -96,15 +96,12 @@ Add this to `CLAUDE.md` / `.github/copilot-instructions.md`:
 agents/clean-coder.md               # the agent
 skills/clean-architecture/          # design-level rules + references/
 skills/clean-code/                  # code-level rules + references/
-COVERAGE.md                         # book chapter -> where it lives in the skills
 ```
 
-## Coverage
+## Credits
 
-Every chapter of *Clean Code* and *Clean Architecture* is mapped to a place in the skills.
-See [COVERAGE.md](COVERAGE.md). The content is paraphrased into rules and checklists;
-no book text is reproduced. If you want the full reasoning behind the rules, read the books
-by Robert C. Martin.
+The rules are paraphrased into short checklists and are not a substitute for the source
+material. For the full reasoning, read *Clean Code* and *Clean Architecture* by Robert C. Martin.
 
 ## Contributing
 

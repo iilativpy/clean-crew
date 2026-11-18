@@ -1,6 +1,6 @@
 ---
 name: clean-code
-description: Code-level craftsmanship rules distilled from "Clean Code" (R. C. Martin) - naming, functions, comments, formatting, error handling, classes, unit tests and code smells. Use whenever writing, changing, refactoring or reviewing code at the line, function or class level, in any language.
+description: Code-level craftsmanship rules - naming, functions, comments, formatting, error handling, classes, unit tests and code smells. Use whenever writing, changing, refactoring or reviewing code at the line, function or class level, in any language.
 ---
 
 # Clean Code - working rules
@@ -9,7 +9,7 @@ Apply these whenever you add or change code. They are defaults, not dogma: when 
 project has an established convention that conflicts, follow the project and mention it.
 
 ## 0. Prime directives
-- Code is read far more than written (the book estimates over 10:1). Optimize for the next reader - you are an author.
+- Code is read far more than written (commonly estimated at over 10:1). Optimize for the next reader - you are an author.
 - Messes slow everyone down until productivity approaches zero, and a grand rewrite rarely
   saves you. Speed comes from keeping the code clean, and cleanup deferred "for later" never happens.
 - **Boy Scout Rule**: leave the code you touched a little cleaner - but only inside the

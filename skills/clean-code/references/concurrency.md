@@ -1,4 +1,4 @@
-# Concurrency (Clean Code ch. 13 + Appendix A "Concurrency II")
+# Concurrency
 
 Load this when the change touches threads, executors, async code, shared mutable state,
 locks, connection pools, schedulers, or anything run in parallel.

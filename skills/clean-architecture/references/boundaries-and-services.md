@@ -1,9 +1,9 @@
-# Boundaries, decoupling modes and services (Clean Architecture ch. 15–19, 24–27)
+# Boundaries, decoupling modes and services
 
 Load this when deciding whether to add a boundary, split something into a module/service,
 choose sync vs. async communication, or design a microservice.
 
-## What architecture is for (ch. 15)
+## What architecture is for
 - Support the system's lifecycle: **development** (team structure), **deployment** (ideally a
   single action), **operation** (usually solvable with hardware, so cheapest concern),
   **maintenance** (most costly: "spelunking" through code and risk of breakage).
@@ -12,7 +12,7 @@ choose sync vs. async communication, or design a microservice.
   Device independence is the classic example: code that didn't know about the specific
   device survived device changes.
 
-## Independence (ch. 16)
+## Independence
 - The architecture must make the **use cases** visible and support operation, development
   (Conway's law: system structure mirrors team communication) and deployment ("immediate
   deployment" after build, no manual fiddling).
@@ -31,7 +31,7 @@ choose sync vs. async communication, or design a microservice.
   formed, but stay in one address space as long as possible**. Service-by-default is expensive
   and tends to be coarse-grained. Be ready to move up (or back down) as needs change.
 
-## Drawing lines (ch. 17)
+## Drawing lines
 - Premature coupling to decisions that don't matter for business rules (frameworks, DB,
   web server, DI, distribution) is what kills productivity.
 - Draw lines between **things that matter and things that don't**: GUI <-> business rules,
@@ -41,7 +41,7 @@ choose sync vs. async communication, or design a microservice.
 - **Plugin architecture**: core business rules; everything else (UI, DB, external services)
   is a plugin. Plugins depend on the core, never the reverse.
 
-## Boundary anatomy (ch. 18)
+## Boundary anatomy
 A boundary crossing is a call from one side to the other plus data; what matters is managing
 **source-code dependencies** across it.
 | Boundary | Communication | Notes |
@@ -53,7 +53,7 @@ A boundary crossing is a call from one side to the other plus data; what matters
 | Services | network; very slow | assume network; avoid chattiness; same dependency rule applies |
 Most systems combine several kinds.
 
-## Policy and level (ch. 19)
+## Policy and level
 - Programs are statements of **policy**. Group policies that change for the same reasons/at the
   same times; separate those that don't.
 - **Level = distance from inputs and outputs.** The farther from I/O, the higher the level.
@@ -62,21 +62,21 @@ Most systems combine several kinds.
   console implementations depend on them).
 - Higher-level policies change less often and for more important reasons.
 
-## Partial boundaries (ch. 24)
+## Partial boundaries
 Full boundaries are expensive. When a boundary might be needed later, consider:
 - **Skip the last step**: build separate components but deploy them together.
 - **One-dimensional boundary**: a Strategy-style interface on one side only (cheap, but
   easy to bypass).
 - **Facade**: a single class routes calls; even the dependency inversion is dropped.
 
-## Layers and boundaries (ch. 25)
+## Layers and boundaries
 - Boundaries hide everywhere - even a tiny text game has several axes of change (UI language,
   delivery mechanism, data storage, network) and the data streams can split and merge.
 - Full boundaries are expensive; missing ones are expensive to add later. YAGNI vs. foresight:
   **watch** the system, note where boundaries may be needed, and implement them at the point
   where the cost of implementing becomes lower than the cost of ignoring. Revisit often.
 
-## Services (ch. 27)
+## Services
 - Services are not an architecture by themselves. The architecture is defined by boundaries
   separating policy from details following the Dependency Rule; services that merely split
   behavior are expensive function calls.

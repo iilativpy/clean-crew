@@ -1,4 +1,4 @@
-# Programming paradigms as architectural tools (Clean Architecture Part II, ch. 3–6)
+# Programming paradigms as architectural tools
 
 Each paradigm **takes something away** from the programmer - a discipline, not a feature.
 Together they map to the three concerns of architecture:
@@ -9,7 +9,7 @@ Together they map to the three concerns of architecture:
 | Object-oriented | indirect transfer of control (no raw function pointers) | **polymorphism to cross boundaries** -> plugin architecture |
 | Functional | assignment (immutability) | discipline on where and how data is mutated |
 
-## Structured programming (ch. 4)
+## Structured programming
 - All programs can be built from sequence, selection and iteration; using only these makes
   modules recursively decomposable into small provable units.
 - Formal proofs never caught on; **software is like science**: tests can show the presence of
@@ -17,7 +17,7 @@ Together they map to the three concerns of architecture:
 - Therefore design for **falsifiability**: decompose functions, modules, components and services
   so each is small and testable. Functional decomposition remains a best practice at every level.
 
-## Object-oriented programming (ch. 5)
+## Object-oriented programming
 - Encapsulation and inheritance existed before OO (and some OO languages weaken encapsulation).
   What OO really made **safe and convenient is polymorphism**.
 - Polymorphism lets you **invert any source-code dependency** regardless of the flow of
@@ -28,7 +28,7 @@ Together they map to the three concerns of architecture:
 - Practical rule: whenever a high-level module would import a low-level one, put an interface
   owned by the high-level side in between.
 
-## Functional programming (ch. 6)
+## Functional programming
 - In functional code, variables don't vary. **All race conditions, deadlocks and
   concurrent-update problems require mutable state** - no mutation, no such problems.
 - Full immutability needs infinite storage/CPU, so compromise:

@@ -1,4 +1,4 @@
-# Refactoring process (Clean Code ch. 3, 14, 15, 16)
+# Refactoring process
 
 Load this before any refactoring, or when a change grows messy while implementing.
 
@@ -45,7 +45,7 @@ Reviewing/refactoring existing code (even good code):
   conditional, invert a negative, unify inconsistent names, fix off-by-one boundary logic.
   Leave each module slightly cleaner than you found it - within the scope of your change.
 
-## Structured programming note (ch. 3)
+## Structured programming note
 - Dijkstra's single-entry/single-exit rule matters for large functions. If functions are
   small, an early `return`, `break` or `continue` can be clearer than contortions to keep a
   single exit. Never `goto`.

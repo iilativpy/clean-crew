@@ -1,4 +1,4 @@
-# Systems and emergent design (Clean Code ch. 11–12)
+# Systems and emergent design
 
 Load this when wiring the application (DI, configuration, startup), adding cross-cutting
 concerns (transactions, security, logging, caching, persistence), or choosing frameworks.
@@ -20,7 +20,7 @@ concerns (transactions, security, logging, caching, persistence), or choosing fr
 ## Scaling up
 - You can't get a system "right the first time". Implement today's stories, then refactor
   and expand. Software architecture **can grow incrementally - if concerns are separated**.
-- Invasive frameworks (the book's example: EJB2) couple business logic to the container,
+- Invasive frameworks (e.g. EJB2) couple business logic to the container,
   make unit testing hard, block reuse and even inheritance. Keep domain logic in
   **plain objects** (POJOs) that know nothing of the framework.
 

@@ -1,4 +1,4 @@
-# Packaging strategies and enforcement (Clean Architecture ch. 21, 34 "The Missing Chapter")
+# Packaging strategies and enforcement
 
 Load this when creating new packages/modules, organizing a code base, or deciding how to
 enforce architecture rules.
@@ -27,7 +27,7 @@ enforce architecture rules.
 - Watch for coupling in other places, e.g. shared data models across components.
 - Be pragmatic: weigh team size, skill, complexity, time and budget.
 
-## Screaming architecture (ch. 21)
+## Screaming architecture
 - Top-level structure should tell you what the system **does** (health care, ordering), not
   which framework it uses. Frameworks are tools, not the architecture.
 - The architecture should let you test all use cases without the web server, database or

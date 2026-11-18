@@ -1,6 +1,6 @@
 ---
 name: clean-architecture
-description: Design-level rules distilled from "Clean Architecture" (R. C. Martin) - SOLID, component cohesion/coupling principles, the Dependency Rule, boundaries, use cases vs details. Use whenever deciding where new code belongs, adding a module/class/endpoint/integration, changing dependencies between packages or layers, or reviewing a design.
+description: Design-level rules - SOLID, component cohesion/coupling principles, the Dependency Rule, boundaries, use cases vs details. Use whenever deciding where new code belongs, adding a module/class/endpoint/integration, changing dependencies between packages or layers, or reviewing a design.
 ---
 
 # Clean Architecture - working rules
@@ -121,7 +121,7 @@ Source-code dependencies point **only inward**, toward higher-level policy.
 - Enforce the dependency rule automatically where possible (e.g. ArchUnit for Java/Kotlin,
   dependency-cruiser for JS/TS, import-linter for Python) instead of trusting review alone.
 
-## 7. Worked approach (from the book's case study)
+## 7. Worked approach (example)
 1. Identify the **actors** (SRP: each actor is a source of change).
 2. List the **use cases** per actor; factor out abstract/shared use cases carefully.
 3. Draw the component architecture: views -> presenters -> interactors (use cases) ->

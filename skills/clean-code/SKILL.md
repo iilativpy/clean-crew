@@ -8,10 +8,10 @@ description: Code-level craftsmanship rules - naming, functions, comments, forma
 Apply these whenever you add or change code. They are defaults, not dogma: when the
 project has an established convention that conflicts, follow the project and mention it.
 
-**Short on time or a small change?** Read sections 0-2, 6, 8 and 11 only. Read the rest when
-the change touches that topic.
+**Short on time or a small change?** Read only the sections marked **[fast path]** (0-2, 6, 8
+and 11). Read the rest when the change touches that topic.
 
-## 0. Prime directives
+## 0. Prime directives [fast path]
 - Code is read far more than written (commonly estimated at over 10:1). Optimize for the next reader - you are an author.
 - Messes slow everyone down until productivity approaches zero, and a grand rewrite rarely
   saves you. Speed comes from keeping the code clean, and cleanup deferred "for later" never happens.
@@ -22,7 +22,7 @@ the change touches that topic.
 - Make it work -> make it right -> (only if measured) make it fast.
 - Every change keeps the tests green. No tests around the area? Add them first.
 
-## 1. Names
+## 1. Names [fast path]
 - Reveal intent: `elapsedDays`, not `d`. If a name needs a comment, rename it.
 - No disinformation: don't call it `accountList` unless it is a List.
 - Make meaningful distinctions - no `data`/`info`/`obj`/`a1`, `a2`, no noise words.
@@ -44,7 +44,7 @@ the change touches that topic.
 - Don't add gratuitous context: no app-wide prefixes (`GSDAccountAddress`); shorter is
   better as long as it's clear.
 
-## 2. Functions
+## 2. Functions [fast path]
 - **Small.** Then smaller. A function body rarely needs more than ~20 lines; blocks inside
   `if`/`else`/`while` ideally one line (a well-named call).
 - **Do one thing.** Test: can you extract another function with a name that isn't a restatement?
@@ -95,7 +95,7 @@ the change touches that topic.
   strangers. Avoid train wrecks `a.getB().getC().doIt()`; tell, don't ask.
 - DTOs/records are fine at boundaries - keep business logic out of them.
 
-## 6. Error handling
+## 6. Error handling [fast path]
 - Use exceptions, not return codes, and follow the language's idiom: unchecked exceptions in
   Java/Kotlin/C#, ordinary exceptions in Python/JS/TS, typed errors or `Result` in Go/Rust.
   Never signal failure with a magic value (`-1`, `None`, empty string).
@@ -114,7 +114,7 @@ the change touches that topic.
 - Write **learning tests** for third-party libraries - they also detect breaking upgrades.
 - For not-yet-existing APIs, define the interface you wish you had, and adapt later.
 
-## 8. Unit tests
+## 8. Unit tests [fast path]
 - TDD laws: no production code without a failing test; just enough test to fail; just enough
   code to pass.
 - Test code is held to the same quality as production code.
@@ -152,7 +152,7 @@ the change touches that topic.
   deadlock by global lock ordering -> **always open `references/concurrency.md` when the
   change touches threads, async, locks or shared mutable state.**
 
-## 11. Smell checklist (run before finishing a change)
+## 11. Smell checklist (run before finishing a change) [fast path]
 The full 66-item catalog with IDs (C1-C5, E1-E2, F1-F4, G1-G36, J1-J3, N1-N7, T1-T9) is in
 `references/smells-catalog.md` - use it for reviews and cite IDs. The most common ones:
 - **Duplication** (copy-paste, repeated if/switch chains) and **dead code**.

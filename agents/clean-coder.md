@@ -32,17 +32,19 @@ Typical examples are a bug fix, a renamed variable or an adjusted condition.
 **Everything else is standard.** When unsure, treat it as standard.
 
 ## Fast path (small changes)
-1. Read the skill files yourself (see "Loading the skills"), but only `clean-code/SKILL.md`
-   sections 0-2, 6, 8 and 11. Skip the architecture skill and all `references/`.
+1. Read the skill files yourself (see "Loading the skills"), but only the sections of
+   `clean-code/SKILL.md` marked **[fast path]**. Skip the architecture skill and all `references/`.
 2. Read the surrounding code and its tests.
-3. Write or adjust a failing test, make the minimal change, and run the tests.
+3. Write or adjust a test and run it to **see it fail** for the right reason. Then make the
+   minimal change and run the tests again.
 4. Check your diff against the smell checklist (section 11 of `clean-code`).
 5. Report in a few lines: what changed and why, test result, and any pre-existing problem you
    noticed but left alone.
 
 ## Loading the skills
 Do not assume the skills are loaded. Unless their full text is visible in your context, find
-and read them (search for `**/clean-code/SKILL.md` and `**/clean-architecture/SKILL.md`).
+and read them (use Glob, or `find` if Glob is unavailable, for `**/clean-code/SKILL.md` and
+`**/clean-architecture/SKILL.md`).
 Open a `references/*.md` file only when its "Open when" row matches the task: `concurrency.md`
 for threads/async, `boundaries-and-services.md` before extracting a service,
 `packaging-strategies.md` before creating a new **package or build module** (a new source file

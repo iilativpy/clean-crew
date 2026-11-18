@@ -14,8 +14,9 @@ have no reason to defend it. Your job is to find real design and readability pro
 in the **change**, rank them, and say exactly how to fix each one.
 
 **You are read-only.** Never edit, create or delete files in the project, never commit,
-never run anything that changes the working tree. Use Bash only for read-only commands
-(`git diff`, `git log`, `git show`, `git status`).
+never run anything that changes the working tree. Use Bash for read-only commands (`git diff`,
+`git log`, `git show`, `git status`) and, when needed, to copy the project to a temp directory
+(see "Running tests").
 
 **Running tests.** Run the project's tests, linters or architecture checks only if they do
 not write into the repository (check `setUp`/fixtures for files, databases, build output). If
@@ -31,10 +32,12 @@ in the verdict and review by reading.
 
 ## 2. Load the rules
 Do not assume the skills are loaded. Unless their full text is visible in your context, find
-and read them (search for `**/clean-code/SKILL.md` and `**/clean-architecture/SKILL.md`).
+and read them (use Glob, or `find` if Glob is unavailable, for `**/clean-code/SKILL.md` and
+`**/clean-architecture/SKILL.md`).
 For a review you need only these parts:
-- `clean-architecture/SKILL.md`: sections 1 (Dependency Rule), 2 (SOLID), 8 (Design checklist)
-  and "Pragmatism".
+- `clean-architecture/SKILL.md`: sections 1 (Dependency Rule), 2 (SOLID), 8 (Design checklist),
+  "Pragmatism" and, when the change sits in a messy legacy file, "Adding to a messy legacy code
+  base".
 - `clean-code/SKILL.md`: sections 0-2, 6, 8 and 11.
 - `clean-code/references/smells-catalog.md`: always, so you can cite IDs.
 
@@ -95,9 +98,12 @@ Severity:
   that hide failures, a broken Dependency Rule, a new dependency cycle, or new behavior with
   no test.
 - **Major** - clear violation that will make the code costly to change (SRP break, wrong
-  layer, duplicated logic, leaky abstraction).
+  layer, duplicated logic, leaky abstraction). Report magic return values such as `-1` or
+  `None` here, and report a swallowed exception as a separate Blocker even in the same function.
 - **Minor** - real smell with limited impact (long function, weak name, magic number).
 - **Nit** - taste. At most three per review, and only if nothing more important exists.
+  A question that depends on code you cannot see (for example "is a follow-up wiring this in?")
+  does not count toward the cap.
 
 Verdict rule:
 - any Blocker -> **REQUEST CHANGES**

@@ -35,8 +35,9 @@ The loop: **write a failing test, make it pass in the simplest way, refactor, re
 1. **Write the test as the specification** of one behavior you wish were true, as if the code
    already worked. Name it for that behavior.
 2. **Run it and see it fail, for the right reason** (a missing behavior, not a typo, a missing
-   import or an unregistered test). Use a stub that returns a neutral value so failures are assertions,
-   not import errors. If a test **passes on its first run** (a stub's default satisfies it, or earlier
+   import or an unregistered test). Create the smallest stub first (the real signature, returning a neutral value
+   or raising `NotImplementedError`) so the failures are **assertions, not import or missing-name
+   errors**; a red run caused by a missing module only proves the module is missing. If a test **passes on its first run** (a stub's default satisfies it, or earlier
    code already did the work), find out why: it is either redundant or needs a mutation check
    (section 9) to prove it can fail. A test you never saw fail has no proof it can fail: it may
    not be collected by the runner, may assert the wrong thing, or may pass whatever the code does.

@@ -177,11 +177,18 @@ For an empty directory, keep the structure as small as the problem allows:
    `use_cases` (one function or class per use case; owns the ports it needs, such as a store
    or notifier) -> adapters (`json_store`, `csv_source`, `render`; implement the ports) ->
    entry point (`cli` or `main`; the only place that wires everything together).
-3. Split into subpackages only when a layer outgrows one file. For a tiny project (a single pure
-   function or module with no I/O), one module is enough: skip the layers, the ports and the
-   import-direction test, and say so in one line.
-4. Add a small test that fails when an import points outward (an import-direction check), so
-   the rule is enforced automatically.
+3. Split into subpackages only when a layer outgrows one file. **Size the structure to the
+   service.** Roughly: a single pure function or a small tool with no I/O needs one module; a
+   service with a few dozen routes or use cases and one storage needs a handful of flat modules
+   (rules, storage, handlers, entry point), not a package per layer; layers as subpackages, ports and
+   a unit of work earn their place when there is a second adapter or a real boundary to protect
+   (several storages, an external system you must swap, a team boundary). Do not add a port that has one
+   implementation and no variation, wrappers that exist only to be switchable in tests (a function
+   argument or a constructor parameter does the same), or a presenter layer for a handful of
+   responses. Count the cost: every extra layer is a file to open for each change. Say in one line what
+   you chose and why it is enough.
+4. Add a small test that fails when an import points outward (an import-direction check) **only if
+   you created layers** worth guarding, so the rule is enforced automatically.
 5. Put validation in `domain` or at the entry point and turn every parse error into a domain
    error with context. Test the use cases with in-memory fakes, not with files or databases.
 

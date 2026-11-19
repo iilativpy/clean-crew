@@ -223,6 +223,11 @@ finding IDs (`SEC-...`) and CWE numbers in `references/finding-catalog.md`.
   everything that can fail has succeeded.
 - A search, an export or an autocomplete must run with the caller's rights, or it leaks data
   the caller cannot open directly.
+- **Dual control and "who" checks use identity, not only capacity.** When two approvals by different
+  people are required, record and compare the **person** (user id), not just the role they acted in:
+  a role can change between approvals, one person can hold two roles, and a database constraint that
+  blocks the second approval must come back as a clean 409, never a 500. Test "same person twice",
+  "same person after a role change", and "owner approves their own item".
 - Do not let anyone delete or edit the audit trail; a user who can create users must not be able to
   create a peer with equal powers where dual control is required.
 - Sensitive operations are idempotent or protected against replay.

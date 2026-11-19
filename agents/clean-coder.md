@@ -68,7 +68,9 @@ before a class hierarchy). A pattern needs a named variation and a real second v
 write the simple code.
 
 Open a `references/*.md` file only when its "Open when" row matches the task: `concurrency.md`
-for threads/async, `boundaries-and-services.md` before extracting a service,
+**before writing any code that uses threads, async, a lock, a pool, a queue, a shared connection or
+shared mutable state, or that must be safe under parallel requests** (a lock or an `RLock` in your
+design is the signal; do not skip it because the code is small), `boundaries-and-services.md` before extracting a service,
 `packaging-strategies.md` before creating a new **package or build module** (a new source file
 inside an existing package does not count). On the standard path always read
 `clean-code/references/smells-catalog.md` in full (about 80 lines) for step 6; the IDs you cite
@@ -96,9 +98,13 @@ come from it.
    placement decision in 2-4 lines before coding (in your report if nobody can read it
    earlier). If the change stays inside one existing module, one line saying so is enough. In a messy legacy code base, follow "Adding to a messy legacy code base"; for an
    empty project follow "Starting a new project", both in `clean-architecture`.
-4. **Test first (or alongside).** Write a failing test for the behavior. For a large new
-   module you may alternate small batches of tests and code, but prove that each new test can
-   fail (run it against a stub, or against the code with the feature broken on purpose). Then,
+4. **Test first (or alongside).** Write a failing test for the behavior. **The failure must be an
+   assertion, not an import or missing-name error:** create the smallest stub first (the function or
+   class with the real signature that returns a neutral value or raises `NotImplementedError`), run the
+   tests, and see them fail on assertions. For a large new module you may alternate small batches of
+   tests and code, but prove that each new test can fail (run it against the stub, or against the code
+   with the feature broken on purpose); a test that passes on its first run needs a mutation check.
+   Then,
    for each new rule, list what can go wrong and add a test for each case that matters:
    - every rejection (invalid input, forbidden state, duplicate),
    - boundaries (empty, zero, maximum, exactly at the limit, ordering),

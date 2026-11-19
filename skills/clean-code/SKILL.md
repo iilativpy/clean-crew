@@ -54,9 +54,15 @@ and 11). Read the rest when the change touches that topic.
 - **Switch/when statements**: bury them once, in a factory, to create polymorphic objects.
   Don't repeat the same switch across the code.
 - **Arguments**: 0 ideal, 1–2 fine, 3 needs justification, more -> introduce a parameter
-  object. **No boolean flag arguments** - split into two functions.
+  object. **No boolean flag arguments** - split into two functions. Never add a parameter to
+  a function that already has three or more; introduce a parameter object or a new function.
+  If a flag must stay in a public signature, handle it in that outermost function only and call
+  flag-free functions from there (do not swap it for a dict of callables or `partial`).
 - No output arguments; if a function must change state, change the state of its owner.
 - **No hidden side effects.** `checkPassword()` must not also initialize a session.
+- **Validate first, then act.** Persist, consume, send or publish only after everything that
+  can fail has succeeded, so a failure leaves nothing half-done (no used-up discount code,
+  no email for an order that was never stored).
 - **Command–Query Separation**: a function either does something or answers something.
 - **Prefer exceptions to error codes**; extract `try` bodies into their own function -
   error handling is "one thing".
@@ -107,6 +113,9 @@ and 11). Read the rest when the change touches that topic.
 - **Don't return null. Don't pass null.** Return empty collections, `Optional`, or a
   Special Case / Null Object.
 - Write the `try-catch-finally` first when code can throw - it defines the transaction scope.
+- **Validate at the boundary.** Convert every parse or library error (number overflow,
+  non-ASCII digits, malformed rows) into a domain error with context. One bad item in a batch
+  is reported and skipped; it must not abort the batch or show a traceback.
 
 ## 7. Boundaries (third-party code)
 - Wrap third-party APIs behind your own interface; don't pass e.g. a raw `Map` with library
@@ -119,6 +128,10 @@ and 11). Read the rest when the change touches that topic.
   code to pass.
 - Test code is held to the same quality as production code.
 - One concept per test; minimal asserts per test; Given–When–Then / Build–Operate–Check.
+- **Test the unhappy paths.** For each new rule: the happy path, every rejection, the
+  boundaries (empty, zero, exactly at the limit, maximum), duplicates and ordering, and a
+  failure in a later step (nothing half-done). A test that would pass even without the
+  feature (for example a concurrency limit whose jobs never overlap) is worthless.
 - Dirty tests are worse than none: they slow every change and end up abandoned, and then
   production code rots because nobody dares to change it. Tests keep code flexible.
 - Build a domain-specific testing language (helpers) for readability.

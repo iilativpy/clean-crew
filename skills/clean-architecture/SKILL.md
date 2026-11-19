@@ -9,8 +9,8 @@ Use this before writing code that adds a new type, module, endpoint, integration
 dependency. Answer "**where does this belong and which way do dependencies point?**"
 first, then write the code (with the `clean-code` skill).
 
-**Which sections to read.** Writing code: 1, 4, 8 and "Pragmatism". Reviewing: 1, 2, 8 and
-"Pragmatism". Section 3 only when creating or splitting packages/modules. Sections 5-7 when
+**Which sections to read.** Sections tagged **[write]** when writing code, tagged **[review]**
+when reviewing. Section 3 only when creating or splitting packages/modules. Sections 5-7 when
 designing a use case, tests or a new feature area. Section 0 is background; skip it when short
 on time.
 
@@ -22,7 +22,7 @@ on time.
 - Developers are responsible for defending structure against the pressure to just ship
   features - a "we'll clean it later" mess makes every release slower.
 
-## 1. The Dependency Rule (non-negotiable)
+## 1. The Dependency Rule (non-negotiable) [write, review]
 Source-code dependencies point **only inward**, toward higher-level policy.
 
 ```
@@ -44,7 +44,7 @@ Source-code dependencies point **only inward**, toward higher-level policy.
 - Polymorphism (OO) is the mechanism that makes any dependency invertible; immutability
   (FP) limits where state can change -> `references/paradigms.md`.
 
-## 2. SOLID (module/class level)
+## 2. SOLID (module/class level) [review]
 - **SRP** - a module is responsible to one actor. Code that changes for different actors
   (e.g. accounting vs ops) must be separated, even if it looks similar. Symptoms of
   violation: accidental duplication (shared helper changed for one actor breaks another)
@@ -83,7 +83,7 @@ Source-code dependencies point **only inward**, toward higher-level policy.
 - Metrics `A = Na/Nc`, distance `D = |A + I − 1|`, cycle-breaking techniques ->
   `references/component-principles.md`.
 
-## 4. Boundaries and structure
+## 4. Boundaries and structure [write]
 - Draw boundaries between things that change at different rates/for different reasons:
   business rules vs. GUI, DB, frameworks, external services.
 - **The database is a detail. The web is a detail. Frameworks are details.** Use them;
@@ -133,7 +133,7 @@ Source-code dependencies point **only inward**, toward higher-level policy.
 4. Check every dependency crossing a boundary points toward the higher-level policy.
 5. Choose the deployment granularity (decoupling mode) separately - it can change later.
 
-## 8. Design checklist (run before writing new code)
+## 8. Design checklist (run before writing new code) [write, review]
 1. Which **actor/use case** drives this change? Which component owns it?
 2. Is this **policy** (entity/use case) or **detail** (adapter/framework/IO)? Put it in the
    matching layer.
@@ -155,7 +155,7 @@ Source-code dependencies point **only inward**, toward higher-level policy.
 | `references/paradigms.md` | Polymorphism/plugin design, immutability, event sourcing, mutable shared state |
 | `references/embedded.md` | Firmware, drivers, hardware/OS-near code only |
 
-## Adding to a messy legacy code base
+## Adding to a messy legacy code base [write, review]
 When the existing code mixes concerns (for example one function doing validation, pricing,
 SQL and email):
 1. Put the **new policy** in a new module next to the old file, with its own tests. It must not
@@ -169,7 +169,21 @@ SQL and email):
    a `create table if not exists` does not alter an existing table. Include a migration if the
    project has a tool for it, otherwise report it as a follow-up.
 
-## Pragmatism
+## Starting a new project [write]
+For an empty directory, keep the structure as small as the problem allows:
+1. Write down the use cases (verbs the user performs) and the domain concepts (nouns, rules).
+2. Start flat: one package with a few modules, ordered by dependency direction:
+   `domain` (entities, value objects, validation; imports nothing) ->
+   `use_cases` (one function or class per use case; owns the ports it needs, such as a store
+   or notifier) -> adapters (`json_store`, `csv_source`, `render`; implement the ports) ->
+   entry point (`cli` or `main`; the only place that wires everything together).
+3. Split into subpackages only when a layer outgrows one file.
+4. Add a small test that fails when an import points outward (an import-direction check), so
+   the rule is enforced automatically.
+5. Put validation in `domain` or at the entry point and turn every parse error into a domain
+   error with context. Test the use cases with in-memory fakes, not with files or databases.
+
+## Pragmatism [write, review]
 - Respect the existing architecture of the project. If it violates these rules, don't
   re-architect inside a feature change: implement cleanly within the current structure,
   avoid making it worse, and report the violation with a suggested incremental fix.

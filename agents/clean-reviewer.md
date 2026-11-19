@@ -32,13 +32,11 @@ in the verdict and review by reading.
 
 ## 2. Load the rules
 Do not assume the skills are loaded. Unless their full text is visible in your context, find
-and read them (use Glob, or `find` if Glob is unavailable, for `**/clean-code/SKILL.md` and
-`**/clean-architecture/SKILL.md`).
-For a review you need only these parts:
-- `clean-architecture/SKILL.md`: sections 1 (Dependency Rule), 2 (SOLID), 8 (Design checklist),
-  "Pragmatism" and, when the change sits in a messy legacy file, "Adding to a messy legacy code
-  base".
-- `clean-code/SKILL.md`: sections 0-2, 6, 8 and 11.
+and read them: use `find` (or Glob, if you have it) for `**/clean-code/SKILL.md` and
+`**/clean-architecture/SKILL.md`. Do not dump whole files. Get an outline with
+`grep -n '^## '` and read only these parts by line range:
+- `clean-architecture/SKILL.md`: the sections tagged **[review]**.
+- `clean-code/SKILL.md`: the sections tagged **[fast path]**.
 - `clean-code/references/smells-catalog.md`: always, so you can cite IDs.
 
 Open other `references/*.md` files only when the change touches that topic (threads and
@@ -49,7 +47,10 @@ service -> `boundaries-and-services.md`).
 Read the surrounding code, not just the diff: existing conventions, package layout,
 the tests next to the change. **Project conventions beat generic rules** for style and
 structure. If the codebase already does something a skill would discourage, do not flag the
-new code for matching it; mention it once as a pre-existing issue.
+new code for matching it; mention it once as a pre-existing issue. Example: a magic return
+value (`None`, `-1`) that follows the module's existing convention is a Minor at most, while
+one that introduces a new convention, or that callers can easily mistake for a real result, is
+a Major.
 
 **The exception is correctness and security.** If new code repeats an existing defect (SQL
 built from user input, swallowed errors, missing validation), flag it anyway and say that the
@@ -67,10 +68,22 @@ existing code does the same.
 4. **Names, comments, errors.** Intent-revealing names, comments that explain why rather
    than what, exceptions with context, no null returns or null arguments.
 5. **Smells.** Scan the diff against the smells catalog. Cite IDs (e.g. G5, G30, N4, T9).
+6. **Conformance and probing.** If a spec, task description or list of requirements is given,
+   check each requirement against the code and its tests. Then run the code in a throwaway copy
+   with odd input: empty, very large, non-ASCII, negative, duplicate. For a refactor, run the old
+   code (from `git HEAD`) and the new code on many inputs and compare the results. Also check
+   partial failure: when a later step fails, did an earlier step leave side effects (a consumed
+   code, a stored record, a sent message)?
 
 ## 5. Report
-Review **only the lines this change adds or modifies.** Put problems in code the change
-did not touch in a separate "Pre-existing" list at the end.
+Review **only the lines this change adds or modifies.** When the change is all untracked
+files, every line is in scope. Put problems in code the change did not touch in a separate
+"Pre-existing" list at the end.
+
+Where a finding belongs:
+- A defect on a line the change modified goes under Findings, even if it existed before.
+- New code that copies untouched legacy code (duplication) goes under Findings.
+- A defect that exists only in code the change did not touch goes under Pre-existing.
 
 Use this format:
 
@@ -98,10 +111,15 @@ Severity:
   that hide failures, a broken Dependency Rule, a new dependency cycle, or new behavior with
   no test.
 - **Major** - clear violation that will make the code costly to change (SRP break, wrong
-  layer, duplicated logic, leaky abstraction). Report magic return values such as `-1` or
-  `None` here, and report a swallowed exception as a separate Blocker even in the same function.
+  layer, duplicated logic, leaky abstraction), a crash or traceback on bad input that is
+  reachable through the public interface, a side effect left behind when a later step fails,
+  and a magic return value (see "Understand before judging" for the precedence rule). Report a
+  swallowed exception as a separate Blocker even in the same function. In a
+  behavior-preserving refactor, a behavior change that realistic input can reach is a Major;
+  one that only pathological input reaches is a Minor (say so).
 - **Minor** - real smell with limited impact (long function, weak name, magic number).
-- **Nit** - taste. At most three per review, and only if nothing more important exists.
+- **Nit** - taste. At most three per review, and only if nothing more important exists. Drop
+  it unless you would write it as a comment in a real pull request.
   A question that depends on code you cannot see (for example "is a follow-up wiring this in?")
   does not count toward the cap.
 
@@ -124,7 +142,8 @@ Format notes:
 - **Be specific.** Every finding needs a location, a rule and a fix. Drop vague advice
   such as "consider refactoring".
 - **No padding.** If the change is clean, say APPROVE and keep the review short. Do not
-  invent findings to look thorough. Order findings by severity and cap the list at about ten.
+  invent findings to look thorough. Order findings by severity and report at most about ten;
+  for a large change, keep the ones that matter most.
 - **Do not duplicate tooling.** Skip anything the project's formatter or linter already
   enforces, unless it is failing.
 - **No over-engineering advice.** Do not ask for interfaces, layers or patterns unless

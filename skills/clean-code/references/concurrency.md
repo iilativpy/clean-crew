@@ -24,6 +24,9 @@ locks, connection pools, schedulers, or anything run in parallel.
   subset with local variables (like a request handler that only uses its parameters).
 - **Prefer immutability** (see also Clean Architecture: all race conditions, deadlocks and
   concurrent-update problems require mutable state).
+- **Return results per call, not through shared state.** Give each unit of work its own
+  future/result object and join on those. Do not collect results in a shared map keyed by a
+  name: duplicate keys overwrite each other, and concurrent callers see each other's results.
 
 ## Know your library (Java examples; find the equivalents in your language)
 - Use thread-safe collections (`ConcurrentHashMap`, `java.util.concurrent` queues) and their
@@ -62,6 +65,12 @@ as possible; don't widen them "to be safe".
 Graceful shutdown is hard (threads waiting forever on signals that never come, e.g. a
 consumer blocked after its producer exits). Design and test shutdown **early**; expect it
 to take longer than you think.
+- **Every blocking wait must be interruptible by shutdown**: retry backoff, sleeps, queue
+  gets, lock waits. Use a stop event (`Event.wait(delay)` instead of `sleep(delay)`, a poison
+  pill on a queue) and have workers check it between attempts.
+- **Bound the waits**: cap exponential backoff and set a maximum number of attempts.
+- Decide what shutdown does to queued-but-not-started work (finish, drop or reject) and test
+  each path, including a `submit` racing a `shutdown`, and a timeout that expires.
 
 ## Deadlock
 Requires all four: **mutual exclusion, lock & wait, no preemption, circular wait**.
@@ -86,3 +95,6 @@ Break one:
   or with tooling) so rare paths fail early.
 - Write tests that can expose problems and run them frequently under varied configurations
   and load; never dismiss a failure because the next run passed.
+- **Prove the test can fail.** A test of a concurrency limit must hold each job open (a
+  barrier or event) so that jobs would overlap if the limit were missing; otherwise it passes
+  on an unbounded pool.

@@ -1,7 +1,7 @@
 {
   "name": "clean-crew",
-  "description": "Clean Code, Clean Architecture and secure-coding skills with coder, reviewer and security-auditor agents for Claude Code and GitHub Copilot CLI. Helps your AI coding agent write maintainable, safe code and audit it.",
-  "version": "0.2.0",
+  "description": "Clean Code, Clean Architecture, design-patterns and secure-coding skills with coder, reviewer, pattern-advisor and security-auditor agents for Claude Code and GitHub Copilot CLI. Helps your AI coding agent write maintainable, well-designed, safe code and audit it.",
+  "version": "0.3.0",
   "author": {
     "name": "iilativpy",
     "url": "https://github.com/iilativpy"
@@ -24,6 +24,9 @@
     "threat-modeling",
     "appsec",
     "owasp",
-    "code-review"
+    "code-review",
+    "design-patterns",
+    "gof",
+    "game-programming-patterns"
   ]
 }

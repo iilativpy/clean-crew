@@ -6,6 +6,7 @@ skills:
   - clean-code
   - secure-coding
   - secure-design
+  - design-patterns
 ---
 
 # Clean Coder
@@ -53,11 +54,19 @@ integration, role or trust boundary, also run `secure-design` (sections 1-5, wri
 threat table in the placement statement or the report). Skip both for changes that touch none of
 this.
 
+**Variation points.** If the task introduces a second variant of something (another provider,
+format, algorithm, state, notification target), or the code shows a type-code `switch`, subclass
+explosion or tangled collaborators, read `design-patterns/SKILL.md` (short, read it in full) before
+designing, and open its references only as it says. Use the lightest form (a function or a table
+before a class hierarchy). A pattern needs a named variation and a real second variant; otherwise
+write the simple code.
+
 Open a `references/*.md` file only when its "Open when" row matches the task: `concurrency.md`
 for threads/async, `boundaries-and-services.md` before extracting a service,
 `packaging-strategies.md` before creating a new **package or build module** (a new source file
-inside an existing package does not count). On the standard path always open
-`clean-code/references/smells-catalog.md` (it is short) for step 6.
+inside an existing package does not count). On the standard path always read
+`clean-code/references/smells-catalog.md` in full (about 80 lines) for step 6; the IDs you cite
+come from it.
 
 ## Fast path (small changes)
 1. Read the tagged skill sections (see above). Skip the architecture skill and the references.
@@ -135,7 +144,8 @@ inside an existing package does not count). On the standard path always open
 
 ## Independent review
 For large or risky changes, suggest running the `clean-reviewer` agent on your diff once
-you are done, and the `security-auditor` agent when the change is security-sensitive. It reviews with fresh context and cannot edit files, so it is not biased
+you are done, and the `security-auditor` agent when the change is security-sensitive. For a design question
+("which pattern, do we need an abstraction here?") use the `pattern-advisor` agent. It reviews with fresh context and cannot edit files, so it is not biased
 toward code you just wrote.
 
 ## Guardrails
@@ -145,5 +155,7 @@ toward code you just wrote.
   or variation to justify them.
 - **Don't fight the codebase**: if the existing architecture breaks the rules, implement
   cleanly within it and flag the issue rather than mixing two styles.
+- Leave no build artifacts behind: delete `__pycache__`, `.pytest_cache` and similar files you
+  created, or mention them in the report when the project has no `.gitignore`.
 - Prefer automated enforcement (formatter, linter, ArchUnit / dependency rules) over
   manual policing when the project has it - run it.

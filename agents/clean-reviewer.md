@@ -5,6 +5,7 @@ tools: Read, Grep, Glob, Bash
 skills:
   - clean-architecture
   - clean-code
+  - design-patterns
 ---
 
 # Clean Reviewer
@@ -39,6 +40,9 @@ and read them: use `find` (or Glob, if you have it) for `**/clean-code/SKILL.md`
 - `clean-code/SKILL.md`: the sections tagged **[fast path]**.
 - `clean-code/references/smells-catalog.md`: always, so you can cite IDs.
 
+For step 4 (patterns), read `design-patterns/SKILL.md` section 5 only when the diff uses or
+needs a pattern.
+
 Open other `references/*.md` files only when the change touches that topic (threads and
 async -> `concurrency.md`, new packages -> `packaging-strategies.md`, a new boundary or
 service -> `boundaries-and-services.md`).
@@ -69,10 +73,15 @@ existing code does the same.
    (one concept, readable, fast, independent)?
 3. **Functions and classes (code).** Size, one thing per function, argument count, flag
    arguments, side effects hidden behind names, classes with more than one reason to change.
-4. **Names, comments, errors.** Intent-revealing names, comments that explain why rather
+4. **Patterns (only when the diff uses or needs one).** Flag an abstraction with a single
+   implementation and no real boundary, a Singleton or "manager" global, a factory for one class,
+   Visitor over an unstable hierarchy, or a missing pattern whose symptom is clear (the same type
+   switch in several places). Use `design-patterns` section 5 for the list. For a deeper design
+   opinion, suggest the `pattern-advisor` agent.
+5. **Names, comments, errors.** Intent-revealing names, comments that explain why rather
    than what, exceptions with context, no null returns or null arguments.
-5. **Smells.** Scan the diff against the smells catalog. Cite IDs (e.g. G5, G30, N4, T9).
-6. **Conformance and probing.** If a spec, task description or list of requirements is given,
+6. **Smells.** Scan the diff against the smells catalog. Cite IDs (e.g. G5, G30, N4, T9).
+7. **Conformance and probing.** If a spec, task description or list of requirements is given,
    check each requirement against the code and its tests. Then run the code in a throwaway copy
    with odd input: empty, very large, non-ASCII, negative, duplicate. For a refactor, run the old
    code (from `git HEAD`) and the new code on many inputs and compare the results. Also check

@@ -1,6 +1,6 @@
 # clean-crew
 
-**Clean Code, Clean Architecture and secure coding for AI coding agents.**
+**Clean Code, Clean Architecture, design patterns and secure coding for AI coding agents.**
 Works with **Claude Code** and **GitHub Copilot CLI**.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -9,8 +9,8 @@ Works with **Claude Code** and **GitHub Copilot CLI**.
 
 AI agents write code that works. `clean-crew` makes them write code that is also
 **easy to read, easy to change, put in the right place, and hard to abuse**. It gives your
-agent four skills and three ready-made agents that apply them every time it writes, reviews or
-audits code.
+agent five skills and four ready-made agents that apply them every time it writes, reviews,
+designs or audits code.
 
 ## What you get
 
@@ -20,8 +20,10 @@ audits code.
 | `clean-code` skill | *How* code is written: naming, small functions, comments, formatting, error handling, classes, unit tests, and a smells checklist |
 | `secure-design` skill | *What can go wrong* before the code exists: a lightweight threat model (data-flow sketch, trust boundaries, STRIDE, abuse cases, ranked threats with a response and a test) and secure design principles |
 | `secure-coding` skill | *How to write it safely*: input handling, injection, output encoding, authentication, sessions and tokens, access control, secrets, logging, business-logic abuse, uploads. Includes a numbered finding catalog mapped to CWE, and web, API and attack-pattern references |
+| `design-patterns` skill | *Whether and which* pattern: when a pattern is warranted (a named variation with a real second variant), what varies versus which pattern, the lightest form in the language at hand, how to introduce one safely, and when it is over-engineering. Includes a condensed catalog of the 23 classic patterns and the game and performance patterns (game loop, component, event queue, object pool, data locality, dirty flag, and more) |
 | `clean-coder` agent | A general-purpose coding agent that loads the skills before any add/change/refactor (the security skills when the change touches input, auth, files, secrets or money), then self-reviews its diff against them |
 | `clean-reviewer` agent | A read-only reviewer for diffs and PRs: fresh context, prioritized findings, smell IDs and concrete fixes. It never edits files |
+| `pattern-advisor` agent | A read-only design advisor: for a requirement or code it decides "no pattern needed", "not yet" or the lightest fitting pattern, and flags patterns that are over-engineered or misapplied. Default answer is the simpler code |
 | `security-auditor` agent | A read-only security auditor for a diff, a feature, a whole repository or a design: maps the attack surface, traces untrusted data to dangerous operations, probes in a throwaway copy, and reports ranked findings with CWE IDs, evidence, fixes and the missing tests |
 
 Each skill has a short `SKILL.md` (always loaded) plus `references/` files that the agent
@@ -38,6 +40,15 @@ smells catalog, the finding catalog, and so on). That keeps your context small.
 6. Builds and runs tests, then reports what changed and why, plus any pre-existing smells it left alone.
 
 Guardrails: no unrequested refactors, no over-engineering, no fighting the existing codebase.
+
+## What the pattern advisor does
+
+1. Names what varies and checks that a second variant really exists; if not, it says "not yet" and
+   what would trigger the refactoring.
+2. Looks for something plainer first: a function, a table, an enum, a language feature.
+3. If a pattern is warranted, picks the lightest form and the pattern whose cost is affordable, says
+   where it goes, who chooses the variant, and which tests prove it.
+4. In review mode, reports missing, misapplied and over-engineered patterns with evidence.
 
 ## What the security auditor does
 
@@ -61,8 +72,8 @@ Guardrails: no unrequested refactors, no over-engineering, no fighting the exist
 
 Then run the agent with `claude --agent clean-crew:clean-coder`, or just let Claude pick up
 the skills automatically when you ask it to write or refactor code. To review a change, ask
-Claude to "use the clean-reviewer agent on my diff", or "use the security-auditor agent to audit
-the login flow".
+Claude to "use the clean-reviewer agent on my diff", "use the pattern-advisor agent: do we need
+a pattern for the payment providers?", or "use the security-auditor agent to audit the login flow".
 
 ### GitHub Copilot CLI (plugin)
 
@@ -71,7 +82,7 @@ copilot plugin marketplace add iilativpy/clean-crew
 copilot plugin install clean-crew@clean-crew
 ```
 
-Select an agent with `/agent` and choose `clean-coder`, `clean-reviewer` or `security-auditor`.
+Select an agent with `/agent` and choose `clean-coder`, `clean-reviewer`, `pattern-advisor` or `security-auditor`.
 
 > Copilot CLI support is based on the documented plugin format (it reads the same
 > `.claude-plugin/` manifests). If something doesn't load for you, please
@@ -95,7 +106,7 @@ cp agents/*.md .claude/agents/
 ```bash
 mkdir -p .github/skills .github/agents
 cp -r skills/* .github/skills/
-for a in clean-coder clean-reviewer security-auditor; do cp agents/$a.md .github/agents/$a.agent.md; done
+for a in clean-coder clean-reviewer pattern-advisor security-auditor; do cp agents/$a.md .github/agents/$a.agent.md; done
 ```
 </details>
 
@@ -115,9 +126,11 @@ Add this to `CLAUDE.md` / `.github/copilot-instructions.md`:
 .claude-plugin/marketplace.json     # makes this repo installable as a marketplace
 agents/clean-coder.md               # writes code following the skills
 agents/clean-reviewer.md            # read-only code-quality reviewer
+agents/pattern-advisor.md           # read-only design-pattern advisor
 agents/security-auditor.md          # read-only security auditor
 skills/clean-architecture/          # design-level rules + references/
 skills/clean-code/                  # code-level rules + references/
+skills/design-patterns/             # pattern judgment + catalog + game/performance patterns
 skills/secure-design/               # threat modeling + design principles + template
 skills/secure-coding/               # secure-coding rules + finding catalog + references/
 ```
@@ -128,6 +141,9 @@ The rules are paraphrased into short checklists and are not a substitute for the
 material.
 
 - Clean Code and Clean Architecture: *Clean Code* and *Clean Architecture* by Robert C. Martin.
+- Design patterns: *Design Patterns: Elements of Reusable Object-Oriented Software* (Gamma,
+  Helm, Johnson, Vlissides) and *Game Programming Patterns* (Robert Nystrom). The catalog cards
+  are condensed and reworded, with modern-language notes added.
 - Security: the attack and defense material draws on *The Web Application Hacker's Handbook*
   (Dafydd Stuttard, Marcus Pinto) and on the access-control and API chapter of *API Security in
   Action* (Neil Madden). Current recommendations (password hashing parameters, cookies, CSRF,

@@ -111,7 +111,8 @@ and 11). Read the rest when the change touches that topic.
 - **Define the normal flow**: don't let exception handling clutter business logic; use the
   Special Case pattern so the caller never needs to handle the exceptional case.
 - **Don't return null. Don't pass null.** Return empty collections, `Optional`, or a
-  Special Case / Null Object.
+  Special Case / Null Object. `None`/`Optional` is fine for an input that may legitimately be
+  absent (an optional filter or field); it is not fine as an error or "not found" signal.
 - Write the `try-catch-finally` first when code can throw - it defines the transaction scope.
 - **Validate at the boundary.** Convert every parse or library error (number overflow,
   non-ASCII digits, malformed rows) into a domain error with context. One bad item in a batch

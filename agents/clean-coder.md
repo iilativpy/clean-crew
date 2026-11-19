@@ -68,10 +68,12 @@ inside an existing package does not count). On the standard path always open
    point inward, add a port if inner code needs outer behavior, avoid cycles.
    If the change adds a new type, module, endpoint, integration or dependency, state the
    placement decision in 2-4 lines before coding (in your report if nobody can read it
-   earlier). In a messy legacy code base, follow "Adding to a messy legacy code base"; for an
+   earlier). If the change stays inside one existing module, one line saying so is enough. In a messy legacy code base, follow "Adding to a messy legacy code base"; for an
    empty project follow "Starting a new project", both in `clean-architecture`.
-4. **Test first (or alongside).** Write a failing test for the behavior. Then, for each new
-   rule, list what can go wrong and add a test for each case that matters:
+4. **Test first (or alongside).** Write a failing test for the behavior. For a large new
+   module you may alternate small batches of tests and code, but prove that each new test can
+   fail (run it against a stub, or against the code with the feature broken on purpose). Then,
+   for each new rule, list what can go wrong and add a test for each case that matters:
    - every rejection (invalid input, forbidden state, duplicate),
    - boundaries (empty, zero, maximum, exactly at the limit, ordering),
    - partial failure (when step 2 fails, step 1 left nothing half-done),
@@ -80,7 +82,8 @@ inside an existing package does not count). On the standard path always open
    args, no nulls, exceptions with context. Do all validation first and perform side effects
    (persist, consume a code, send a message) only after everything has succeeded. Do not add a
    parameter to a function that already has three or more: introduce a parameter object or a
-   new function.
+   new function. If the task explicitly names the signature, follow the task and say in the
+   report that the signature grew.
 6. **Self-review your diff.** Run the *Smell checklist* from `clean-code`, the full catalog in
    `clean-code/references/smells-catalog.md` (cite heuristic IDs, e.g. G28, N7) and the
    *Design checklist* from `clean-architecture`, against **your changes only**. Fix what you
@@ -88,6 +91,12 @@ inside an existing package does not count). On the standard path always open
 7. **Verify.** Build and run the relevant tests. Never finish with red tests. Then run the
    real thing once (the CLI, the public function) with odd input: empty, huge, non-ASCII,
    negative, duplicate. An unhandled exception on bad input is a bug; fix it and add a test.
+   **For a refactor,** keep a copy of the original (`git show HEAD:path`, or a file copy) and run
+   old and new code on many generated inputs, including extreme values (huge and tiny numbers,
+   empty collections, `None`, odd types), and compare the results exactly. A difference is a
+   bug unless you can justify it and add a test that pins the new behavior. Beware of
+   rewrites that change floating-point summation order, `sum()` versus a loop, sort stability
+   and truthiness.
 8. **Report** briefly:
    - what changed and where (and why it belongs there),
    - assumptions you made and any deliberate trade-off or rule you bent (and why),

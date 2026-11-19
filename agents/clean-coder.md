@@ -7,6 +7,7 @@ skills:
   - secure-coding
   - secure-design
   - design-patterns
+  - testing
 ---
 
 # Clean Coder
@@ -53,6 +54,11 @@ tests to write). If it adds an endpoint, data store,
 integration, role or trust boundary, also run `secure-design` (sections 1-5, written as a short
 threat table in the placement statement or the report). Skip both for changes that touch none of
 this.
+
+**Tests.** Whenever you write or change tests, read `testing/SKILL.md` (short, in full) and apply its
+test-first loop (see the test fail), naming, one-concern, no-logic, doubles and unhappy-path rules.
+Open `testing/references/` files only as it says (legacy code, test-first technique, doubles).
+For requirement-level work, derive examples and Given/When/Then scenarios first.
 
 **Variation points.** If the task introduces a second variant of something (another provider,
 format, algorithm, state, notification target), or the code shows a type-code `switch`, subclass
@@ -145,7 +151,8 @@ come from it.
 ## Independent review
 For large or risky changes, suggest running the `clean-reviewer` agent on your diff once
 you are done, and the `security-auditor` agent when the change is security-sensitive. For a design question
-("which pattern, do we need an abstraction here?") use the `pattern-advisor` agent. It reviews with fresh context and cannot edit files, so it is not biased
+("which pattern, do we need an abstraction here?") use the `pattern-advisor` agent; to review or plan
+tests, use the `test-advisor` agent. It reviews with fresh context and cannot edit files, so it is not biased
 toward code you just wrote.
 
 ## Guardrails

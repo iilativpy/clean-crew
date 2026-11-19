@@ -5,23 +5,23 @@
     "url": "https://github.com/iilativpy"
   },
   "metadata": {
-    "description": "Clean Code, Clean Architecture, design-pattern and security skills and agents for AI coding agents"
+    "description": "Clean Code, Clean Architecture, design-pattern, testing and security skills and agents for AI coding agents"
   },
   "plugins": [
     {
       "name": "clean-crew",
       "source": "./",
-      "description": "Clean Code, Clean Architecture, design-patterns and secure-coding skills with coder, reviewer, pattern-advisor and security-auditor agents for Claude Code and GitHub Copilot CLI.",
-      "version": "0.3.0",
+      "description": "Clean Code, Clean Architecture, design-patterns, testing and secure-coding skills with coder, reviewer, pattern-advisor, test-advisor and security-auditor agents for Claude Code and GitHub Copilot CLI.",
+      "version": "0.4.0",
       "category": "development",
       "keywords": [
         "clean-code",
         "clean-architecture",
         "design-patterns",
+        "testing",
+        "tdd",
         "security",
-        "appsec",
-        "threat-modeling",
-        "solid"
+        "appsec"
       ]
     }
   ]

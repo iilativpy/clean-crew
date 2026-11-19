@@ -1,6 +1,6 @@
 # clean-crew
 
-**Clean Code, Clean Architecture, design patterns and secure coding for AI coding agents.**
+**Clean Code, Clean Architecture, design patterns, testing and secure coding for AI coding agents.**
 Works with **Claude Code** and **GitHub Copilot CLI**.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -9,7 +9,7 @@ Works with **Claude Code** and **GitHub Copilot CLI**.
 
 AI agents write code that works. `clean-crew` makes them write code that is also
 **easy to read, easy to change, put in the right place, and hard to abuse**. It gives your
-agent five skills and four ready-made agents that apply them every time it writes, reviews,
+agent six skills and five ready-made agents that apply them every time it writes, reviews,
 designs or audits code.
 
 ## What you get
@@ -21,9 +21,11 @@ designs or audits code.
 | `secure-design` skill | *What can go wrong* before the code exists: a lightweight threat model (data-flow sketch, trust boundaries, STRIDE, abuse cases, ranked threats with a response and a test) and secure design principles |
 | `secure-coding` skill | *How to write it safely*: input handling, injection, output encoding, authentication, sessions and tokens, access control, secrets, logging, business-logic abuse, uploads. Includes a numbered finding catalog mapped to CWE, and web, API and attack-pattern references |
 | `design-patterns` skill | *Whether and which* pattern: when a pattern is warranted (a named variation with a real second variant), what varies versus which pattern, the lightest form in the language at hand, how to introduce one safely, and when it is over-engineering. Includes a condensed catalog of the 23 classic patterns and the game and performance patterns (game loop, component, event queue, object pool, data locality, dirty flag, and more) |
+| `testing` skill | *How to test*: what a good unit test is (one unit of work, one end result), the test-first loop (see it fail), naming and structure, trustworthy/maintainable/readable rules with a catalog of test smells, stubs vs mocks vs fakes, unhappy paths and boundaries, legacy code and testability, and BDD: examples, Given/When/Then scenarios, layered acceptance tests, living documentation |
 | `clean-coder` agent | A general-purpose coding agent that loads the skills before any add/change/refactor (the security skills when the change touches input, auth, files, secrets or money), then self-reviews its diff against them |
 | `clean-reviewer` agent | A read-only reviewer for diffs and PRs: fresh context, prioritized findings, smell IDs and concrete fixes. It never edits files |
 | `pattern-advisor` agent | A read-only design advisor: for a requirement or code it decides "no pattern needed", "not yet" or the lightest fitting pattern, and flags patterns that are over-engineered or misapplied. Default answer is the simpler code |
+| `test-advisor` agent | A read-only testing advisor: reviews a test suite (runs it in a copy, checks order independence, mutation-checks key rules), plans the cases and Given/When/Then scenarios a requirement needs, and advises on legacy code and testability |
 | `security-auditor` agent | A read-only security auditor for a diff, a feature, a whole repository or a design: maps the attack surface, traces untrusted data to dangerous operations, probes in a throwaway copy, and reports ranked findings with CWE IDs, evidence, fixes and the missing tests |
 
 Each skill has a short `SKILL.md` (always loaded) plus `references/` files that the agent
@@ -50,6 +52,16 @@ Guardrails: no unrequested refactors, no over-engineering, no fighting the exist
    where it goes, who chooses the variant, and which tests prove it.
 4. In review mode, reports missing, misapplied and over-engineered patterns with evidence.
 
+## What the test advisor does
+
+1. **Review:** runs the suite in a throwaway copy (also in random order), reads the names, hunts for
+   logic in tests, overspecification and multi-concern tests, mutation-checks the important rules,
+   and lists the missing cases, using the `UT-n` smell catalog.
+2. **Plan:** turns a requirement into a ranked list of cases (rules, rejections, both edges of every
+   boundary) and concrete Given/When/Then examples, with the level and style of each.
+3. **Legacy and testability:** picks where to start, names the seams, and proposes characterization
+   tests before refactoring.
+
 ## What the security auditor does
 
 1. Maps entry points, trust boundaries, assets and where authorization is enforced.
@@ -72,7 +84,7 @@ Guardrails: no unrequested refactors, no over-engineering, no fighting the exist
 
 Then run the agent with `claude --agent clean-crew:clean-coder`, or just let Claude pick up
 the skills automatically when you ask it to write or refactor code. To review a change, ask
-Claude to "use the clean-reviewer agent on my diff", "use the pattern-advisor agent: do we need
+Claude to "use the clean-reviewer agent on my diff", "use the test-advisor agent to review these tests", "use the pattern-advisor agent: do we need
 a pattern for the payment providers?", or "use the security-auditor agent to audit the login flow".
 
 ### GitHub Copilot CLI (plugin)
@@ -82,7 +94,7 @@ copilot plugin marketplace add iilativpy/clean-crew
 copilot plugin install clean-crew@clean-crew
 ```
 
-Select an agent with `/agent` and choose `clean-coder`, `clean-reviewer`, `pattern-advisor` or `security-auditor`.
+Select an agent with `/agent` and choose `clean-coder`, `clean-reviewer`, `pattern-advisor`, `test-advisor` or `security-auditor`.
 
 > Copilot CLI support is based on the documented plugin format (it reads the same
 > `.claude-plugin/` manifests). If something doesn't load for you, please
@@ -106,7 +118,7 @@ cp agents/*.md .claude/agents/
 ```bash
 mkdir -p .github/skills .github/agents
 cp -r skills/* .github/skills/
-for a in clean-coder clean-reviewer pattern-advisor security-auditor; do cp agents/$a.md .github/agents/$a.agent.md; done
+for a in clean-coder clean-reviewer pattern-advisor test-advisor security-auditor; do cp agents/$a.md .github/agents/$a.agent.md; done
 ```
 </details>
 
@@ -127,9 +139,11 @@ Add this to `CLAUDE.md` / `.github/copilot-instructions.md`:
 agents/clean-coder.md               # writes code following the skills
 agents/clean-reviewer.md            # read-only code-quality reviewer
 agents/pattern-advisor.md           # read-only design-pattern advisor
+agents/test-advisor.md              # read-only testing advisor
 agents/security-auditor.md          # read-only security auditor
 skills/clean-architecture/          # design-level rules + references/
 skills/clean-code/                  # code-level rules + references/
+skills/testing/                     # unit testing, TDD, BDD + references
 skills/design-patterns/             # pattern judgment + catalog + game/performance patterns
 skills/secure-design/               # threat modeling + design principles + template
 skills/secure-coding/               # secure-coding rules + finding catalog + references/
@@ -144,6 +158,9 @@ material.
 - Design patterns: *Design Patterns: Elements of Reusable Object-Oriented Software* (Gamma,
   Helm, Johnson, Vlissides) and *Game Programming Patterns* (Robert Nystrom). The catalog cards
   are condensed and reworded, with modern-language notes added.
+- Testing: *The Art of Unit Testing* (Roy Osherove), *Test-Driven Development: Extensive Tutorial*
+  (Grzegorz Gałęzowski, CC BY 3.0) and *BDD in Action* (John Ferguson Smart). The rules are
+  condensed and reworded, and made language-neutral.
 - Security: the attack and defense material draws on *The Web Application Hacker's Handbook*
   (Dafydd Stuttard, Marcus Pinto) and on the access-control and API chapter of *API Security in
   Action* (Neil Madden). Current recommendations (password hashing parameters, cookies, CSRF,

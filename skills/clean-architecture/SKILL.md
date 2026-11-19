@@ -177,7 +177,9 @@ For an empty directory, keep the structure as small as the problem allows:
    `use_cases` (one function or class per use case; owns the ports it needs, such as a store
    or notifier) -> adapters (`json_store`, `csv_source`, `render`; implement the ports) ->
    entry point (`cli` or `main`; the only place that wires everything together).
-3. Split into subpackages only when a layer outgrows one file.
+3. Split into subpackages only when a layer outgrows one file. For a tiny project (a single pure
+   function or module with no I/O), one module is enough: skip the layers, the ports and the
+   import-direction test, and say so in one line.
 4. Add a small test that fails when an import points outward (an import-direction check), so
    the rule is enforced automatically.
 5. Put validation in `domain` or at the entry point and turn every parse error into a domain

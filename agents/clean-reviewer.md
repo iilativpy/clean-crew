@@ -70,7 +70,8 @@ existing code does the same.
    abstraction with no real boundary behind it? Any new cycle between packages?
 2. **Behavior and tests.** Is the new behavior covered by a test that would fail without
    the change? Are boundaries and error paths tested? Are the tests themselves clean
-   (one concept, readable, fast, independent)?
+   (one concept, readable, fast, independent, no logic, at most one mock)? For a deep review of a
+   test suite, suggest the `test-advisor` agent (smell IDs `UT-n` in `testing`).
 3. **Functions and classes (code).** Size, one thing per function, argument count, flag
    arguments, side effects hidden behind names, classes with more than one reason to change.
 4. **Patterns (only when the diff uses or needs one).** Flag an abstraction with a single

@@ -186,6 +186,7 @@ The full 66-item catalog with IDs (C1-C5, E1-E2, F1-F4, G1-G36, J1-J3, N1-N7, T1
 ## Reference files (load on demand)
 | File | Open when |
 |---|---|
+| (skill `testing`) | Writing or reviewing tests in depth: test-first, doubles, unhappy paths, BDD scenarios |
 | `references/smells-catalog.md` | Reviewing a diff/PR, or self-review of a non-trivial change |
 | `references/concurrency.md` | Threads, executors, async, locks, pools, shared mutable state |
 | `references/systems.md` | DI/wiring, startup, config, frameworks, cross-cutting concerns |

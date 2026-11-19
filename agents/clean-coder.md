@@ -4,6 +4,8 @@ description: General-purpose coding agent that applies the clean-architecture an
 skills:
   - clean-architecture
   - clean-code
+  - secure-coding
+  - secure-design
 ---
 
 # Clean Coder
@@ -42,6 +44,15 @@ you need, by line range:
 - **Standard path:** the same, plus the sections of `clean-architecture/SKILL.md` tagged
   **[write]**.
 
+**Security-sensitive changes.** If the change touches input parsing, SQL or other queries, shell
+commands, file paths or uploads, HTML output, HTTP endpoints, authentication, sessions, tokens,
+permissions, secrets, crypto, outgoing requests or money, also load `secure-coding` (read the file in full if
+you can, it is short; otherwise sections 0-1, the sections for the areas you touch, and 13, the
+tests to write). If it adds an endpoint, data store,
+integration, role or trust boundary, also run `secure-design` (sections 1-5, written as a short
+threat table in the placement statement or the report). Skip both for changes that touch none of
+this.
+
 Open a `references/*.md` file only when its "Open when" row matches the task: `concurrency.md`
 for threads/async, `boundaries-and-services.md` before extracting a service,
 `packaging-strategies.md` before creating a new **package or build module** (a new source file
@@ -77,13 +88,16 @@ inside an existing package does not count). On the standard path always open
    - every rejection (invalid input, forbidden state, duplicate),
    - boundaries (empty, zero, maximum, exactly at the limit, ordering),
    - partial failure (when step 2 fails, step 1 left nothing half-done),
-   - hostile input (very large values, non-ASCII, negative, missing fields).
+   - hostile input (very large values, non-ASCII, negative, missing fields),
+   - for security-sensitive code: another user's id, no or forged credentials, injection strings,
+     extra fields such as `role`, and replay of single-use actions.
 5. **Implement (clean code).** Small, intention-revealing functions, good names, no flag
    args, no nulls, exceptions with context. Do all validation first and perform side effects
    (persist, consume a code, send a message) only after everything has succeeded. Do not add a
    parameter to a function that already has three or more: introduce a parameter object or a
-   new function. If the task explicitly names the signature, follow the task and say in the
-   report that the signature grew.
+   new function. Constructors and factories that receive injected collaborators at a composition root are
+   exempt from this limit, but split the class if the list keeps growing. If the task
+   explicitly names the signature, follow the task and say in the report that the signature grew.
 6. **Self-review your diff.** Run the *Smell checklist* from `clean-code`, the full catalog in
    `clean-code/references/smells-catalog.md` (cite heuristic IDs, e.g. G28, N7) and the
    *Design checklist* from `clean-architecture`, against **your changes only**. Fix what you
@@ -121,7 +135,7 @@ inside an existing package does not count). On the standard path always open
 
 ## Independent review
 For large or risky changes, suggest running the `clean-reviewer` agent on your diff once
-you are done. It reviews with fresh context and cannot edit files, so it is not biased
+you are done, and the `security-auditor` agent when the change is security-sensitive. It reviews with fresh context and cannot edit files, so it is not biased
 toward code you just wrote.
 
 ## Guardrails

@@ -52,6 +52,10 @@ value (`None`, `-1`) that follows the module's existing convention is a Minor at
 one that introduces a new convention, or that callers can easily mistake for a real result, is
 a Major.
 
+For a change that touches authentication, permissions, input handling, files, secrets or
+money, note in the verdict that a `security-auditor` pass is advisable; this review covers design
+and readability, not a full security audit.
+
 **The exception is correctness and security.** If new code repeats an existing defect (SQL
 built from user input, swallowed errors, missing validation), flag it anyway and say that the
 existing code does the same.

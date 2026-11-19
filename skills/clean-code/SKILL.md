@@ -56,7 +56,8 @@ and 11). Read the rest when the change touches that topic.
 - **Arguments**: 0 ideal, 1–2 fine, 3 needs justification, more -> introduce a parameter
   object. **No boolean flag arguments** - split into two functions. Never add a parameter to
   a function that already has three or more; introduce a parameter object or a new function.
-  If a flag must stay in a public signature, handle it in that outermost function only and call
+  (Constructors and factories that receive injected collaborators at a composition root are
+  exempt, but split the class if the list keeps growing.) If a flag must stay in a public signature, handle it in that outermost function only and call
   flag-free functions from there (do not swap it for a dict of callables or `partial`).
 - No output arguments; if a function must change state, change the state of its owner.
 - **No hidden side effects.** `checkPassword()` must not also initialize a session.

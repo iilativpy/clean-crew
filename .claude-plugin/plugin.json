@@ -1,7 +1,7 @@
 {
   "name": "clean-crew",
-  "description": "Clean Code + Clean Architecture skills and a clean-coder agent for Claude Code and GitHub Copilot CLI. Makes your AI coding agent write maintainable code: naming, functions, SOLID, boundaries, smells checklist.",
-  "version": "0.1.0",
+  "description": "Clean Code, Clean Architecture and secure-coding skills with coder, reviewer and security-auditor agents for Claude Code and GitHub Copilot CLI. Helps your AI coding agent write maintainable, safe code and audit it.",
+  "version": "0.2.0",
   "author": {
     "name": "iilativpy",
     "url": "https://github.com/iilativpy"
@@ -18,6 +18,12 @@
     "code-smells",
     "agent-skills",
     "claude-code",
-    "github-copilot"
+    "github-copilot",
+    "security",
+    "secure-coding",
+    "threat-modeling",
+    "appsec",
+    "owasp",
+    "code-review"
   ]
 }

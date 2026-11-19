@@ -1,6 +1,6 @@
 # clean-crew
 
-**Clean Code + Clean Architecture for AI coding agents.**
+**Clean Code, Clean Architecture and secure coding for AI coding agents.**
 Works with **Claude Code** and **GitHub Copilot CLI**.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -8,8 +8,9 @@ Works with **Claude Code** and **GitHub Copilot CLI**.
 ![GitHub Copilot CLI](https://img.shields.io/badge/Copilot%20CLI-plugin-181717)
 
 AI agents write code that works. `clean-crew` makes them write code that is also
-**easy to read, easy to change, and put in the right place**. It gives your agent two
-skills and a ready-made agent that applies them every time it touches code.
+**easy to read, easy to change, put in the right place, and hard to abuse**. It gives your
+agent four skills and three ready-made agents that apply them every time it writes, reviews or
+audits code.
 
 ## What you get
 
@@ -17,12 +18,15 @@ skills and a ready-made agent that applies them every time it touches code.
 |---|---|
 | `clean-architecture` skill | *Where* code goes and *which way dependencies point*: SOLID, the Dependency Rule, component cohesion/coupling, boundaries, use cases vs. details |
 | `clean-code` skill | *How* code is written: naming, small functions, comments, formatting, error handling, classes, unit tests, and a smells checklist |
-| `clean-coder` agent | A general-purpose coding agent that loads both skills before any add/change/refactor, then self-reviews its diff against them |
+| `secure-design` skill | *What can go wrong* before the code exists: a lightweight threat model (data-flow sketch, trust boundaries, STRIDE, abuse cases, ranked threats with a response and a test) and secure design principles |
+| `secure-coding` skill | *How to write it safely*: input handling, injection, output encoding, authentication, sessions and tokens, access control, secrets, logging, business-logic abuse, uploads. Includes a numbered finding catalog mapped to CWE, and web, API and attack-pattern references |
+| `clean-coder` agent | A general-purpose coding agent that loads the skills before any add/change/refactor (the security skills when the change touches input, auth, files, secrets or money), then self-reviews its diff against them |
 | `clean-reviewer` agent | A read-only reviewer for diffs and PRs: fresh context, prioritized findings, smell IDs and concrete fixes. It never edits files |
+| `security-auditor` agent | A read-only security auditor for a diff, a feature, a whole repository or a design: maps the attack surface, traces untrusted data to dangerous operations, probes in a throwaway copy, and reports ranked findings with CWE IDs, evidence, fixes and the missing tests |
 
 Each skill has a short `SKILL.md` (always loaded) plus `references/` files that the agent
 opens only when the task needs them (concurrency, packaging, service boundaries, the full
-smells catalog, and so on). That keeps your context small.
+smells catalog, the finding catalog, and so on). That keeps your context small.
 
 ## What the agent does on every code change
 
@@ -35,6 +39,17 @@ smells catalog, and so on). That keeps your context small.
 
 Guardrails: no unrequested refactors, no over-engineering, no fighting the existing codebase.
 
+## What the security auditor does
+
+1. Maps entry points, trust boundaries, assets and where authorization is enforced.
+2. Checks authorization first (missing object-level and function-level checks), then
+   authentication, injection, output and browser controls, files and outgoing requests, secrets,
+   errors, business logic, dependencies and tests.
+3. Separates **confirmed** findings (reproduced or fully traced) from **possible** ones, so a grep
+   hit is never reported as a vulnerability.
+4. Never edits the project, never touches live systems, redacts any secret it finds, and says
+   what it did not check.
+
 ## Install
 
 ### Claude Code (plugin)
@@ -46,7 +61,8 @@ Guardrails: no unrequested refactors, no over-engineering, no fighting the exist
 
 Then run the agent with `claude --agent clean-crew:clean-coder`, or just let Claude pick up
 the skills automatically when you ask it to write or refactor code. To review a change, ask
-Claude to "use the clean-reviewer agent on my diff".
+Claude to "use the clean-reviewer agent on my diff", or "use the security-auditor agent to audit
+the login flow".
 
 ### GitHub Copilot CLI (plugin)
 
@@ -55,7 +71,7 @@ copilot plugin marketplace add iilativpy/clean-crew
 copilot plugin install clean-crew@clean-crew
 ```
 
-Select an agent with `/agent` and choose `clean-coder` or `clean-reviewer`.
+Select an agent with `/agent` and choose `clean-coder`, `clean-reviewer` or `security-auditor`.
 
 > Copilot CLI support is based on the documented plugin format (it reads the same
 > `.claude-plugin/` manifests). If something doesn't load for you, please
@@ -68,8 +84,8 @@ Select an agent with `/agent` and choose `clean-coder` or `clean-reviewer`.
 
 ```bash
 mkdir -p .claude/skills .claude/agents
-cp -r skills/clean-code skills/clean-architecture .claude/skills/
-cp agents/clean-coder.md agents/clean-reviewer.md .claude/agents/
+cp -r skills/* .claude/skills/
+cp agents/*.md .claude/agents/
 ```
 </details>
 
@@ -78,9 +94,8 @@ cp agents/clean-coder.md agents/clean-reviewer.md .claude/agents/
 
 ```bash
 mkdir -p .github/skills .github/agents
-cp -r skills/clean-code skills/clean-architecture .github/skills/
-cp agents/clean-coder.md .github/agents/clean-coder.agent.md
-cp agents/clean-reviewer.md .github/agents/clean-reviewer.agent.md
+cp -r skills/* .github/skills/
+for a in clean-coder clean-reviewer security-auditor; do cp agents/$a.md .github/agents/$a.agent.md; done
 ```
 </details>
 
@@ -90,6 +105,8 @@ Add this to `CLAUDE.md` / `.github/copilot-instructions.md`:
 
 > Whenever you add or change code, first load the `clean-architecture` and `clean-code`
 > skills and follow their checklists; self-review your diff against them before finishing.
+> If the change touches input, authentication, permissions, files, secrets or money, also
+> follow the `secure-coding` skill and write tests that send hostile input.
 
 ## Repository layout
 
@@ -97,15 +114,29 @@ Add this to `CLAUDE.md` / `.github/copilot-instructions.md`:
 .claude-plugin/plugin.json          # plugin manifest (Claude Code + Copilot CLI)
 .claude-plugin/marketplace.json     # makes this repo installable as a marketplace
 agents/clean-coder.md               # writes code following the skills
-agents/clean-reviewer.md            # read-only reviewer
+agents/clean-reviewer.md            # read-only code-quality reviewer
+agents/security-auditor.md          # read-only security auditor
 skills/clean-architecture/          # design-level rules + references/
 skills/clean-code/                  # code-level rules + references/
+skills/secure-design/               # threat modeling + design principles + template
+skills/secure-coding/               # secure-coding rules + finding catalog + references/
 ```
 
 ## Credits
 
 The rules are paraphrased into short checklists and are not a substitute for the source
-material. For the full reasoning, read *Clean Code* and *Clean Architecture* by Robert C. Martin.
+material.
+
+- Clean Code and Clean Architecture: *Clean Code* and *Clean Architecture* by Robert C. Martin.
+- Security: the attack and defense material draws on *The Web Application Hacker's Handbook*
+  (Dafydd Stuttard, Marcus Pinto) and on the access-control and API chapter of *API Security in
+  Action* (Neil Madden). Current recommendations (password hashing parameters, cookies, CSRF,
+  JWT, OAuth2, SSRF, CSP, uploads) follow the OWASP Cheat Sheet Series, and the threat-modeling
+  method follows the four-question framework of Adam Shostack and the Threat Modeling Manifesto.
+  Finding IDs map to CWE numbers.
+
+The security skills are a review and design aid, not a guarantee. They do not replace a
+penetration test, a dependency scanner, or a security professional for high-risk systems.
 
 ## Contributing
 
